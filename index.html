@@ -532,17 +532,21 @@ const SITE_URL="https://monkkimkikiki.github.io/shanghai-trip/";
 const b64e=o=>{const u=new TextEncoder().encode(JSON.stringify(o));let b="";u.forEach(c=>b+=String.fromCharCode(c));return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
 const b64d=t=>{t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const b=atob(t),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return JSON.parse(new TextDecoder().decode(u))};
 const siteBase=()=>(SITE_URL||store.get("sh_site")||"").trim().split("#")[0];
-const mkLink=()=>siteBase()+"#s="+b64e({v:1,schedules,favorites,done});
+const bytes2b64=u=>{let b="";u.forEach(c=>b+=String.fromCharCode(c));return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
+const b642bytes=t=>{t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const b=atob(t),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function packData(o){const raw=new TextEncoder().encode(JSON.stringify(o));try{if(window.CompressionStream){const cs=new Blob([raw]).stream().pipeThrough(new CompressionStream("deflate-raw"));return "z"+bytes2b64(new Uint8Array(await new Response(cs).arrayBuffer()))}}catch(e){}return bytes2b64(raw)}
+async function unpackData(t){if(t[0]==="z"){const ds=new Blob([b642bytes(t.slice(1))]).stream().pipeThrough(new DecompressionStream("deflate-raw"));return JSON.parse(new TextDecoder().decode(await new Response(ds).arrayBuffer()))}return JSON.parse(new TextDecoder().decode(b642bytes(t)))}
+const mkLink=async()=>siteBase()+"?s="+await packData({v:1,schedules,favorites,done});
 $("siteCopy").onclick=()=>copyText(siteBase(),$("siteCopy"),"📋 사이트 주소 복사");
-$("linkCopy").onclick=()=>copyText(mkLink(),$("linkCopy"),"📋 일정 포함 링크 복사");
+$("linkCopy").onclick=async()=>copyText(await mkLink(),$("linkCopy"),"📋 일정 포함 링크 복사");
 $("linkBtn").onclick=async()=>{const base=siteBase();if(!base)return;
- const url=mkLink();
+ const url=await mkLink();
  if(navigator.share){try{await navigator.share({title:"상하이 여행 가이드",text:"상하이 여행 일정 · 누르면 일정이 담긴 사이트가 열려요",url});return}catch(e){if(e&&e.name==="AbortError")return}}
  copyText(url,$("linkBtn"),"🔗 링크 공유 (카톡)")};
-function showImport(){let m=location.hash.match(/^#s=(.+)$/);if(!m)return;let d;try{d=b64d(m[1])}catch(e){return}
+async function showImport(){let m=location.search.match(/[?&]s=([^&#]+)/)||location.hash.match(/^#s=(.+)$/);if(!m)return;let d;try{d=await unpackData(decodeURIComponent(m[1]))}catch(e){$("importBar").innerHTML='<div class="warn">링크의 일정 데이터를 읽지 못했어요. 링크가 중간에 잘렸을 수 있어요. 일정 파일로 받아 보세요.</div>';return}
  if(!d||!Array.isArray(d.schedules))return;
  $("importBar").innerHTML=`<div class="card" style="border:2px solid #236b78"><b>📩 공유된 일정이 있어요</b><div class="muted" style="margin:6px 0">일정 ${d.schedules.length}개 · 즐겨찾기 ${(d.favorites||[]).length}개. 불러올까요?</div><div class="actions"><button class="small" id="impMerge" type="button">내 일정에 합치기</button><button class="small secondary" id="impReplace" type="button">공유된 걸로 바꾸기</button><button class="small outline" id="impSkip" type="button">무시</button></div></div>`;
- const clean=()=>{$("importBar").innerHTML="";try{history.replaceState(null,"",location.pathname+location.search)}catch(e){location.hash=""}};
+ const clean=()=>{$("importBar").innerHTML="";try{history.replaceState(null,"",location.pathname)}catch(e){location.hash=""}};
  $("impMerge").onclick=()=>{const key=x=>[x.day,x.time||"",x.title||x.name||"",x.cn||""].join("|");const have=new Set(schedules.map(key));d.schedules.forEach(x=>{if(!have.has(key(x)))schedules.push(x)});(d.favorites||[]).forEach(f=>{if(!favorites.includes(f))favorites.push(f)});save();clean()};
  $("impReplace").onclick=()=>{schedules=d.schedules;favorites=Array.isArray(d.favorites)?d.favorites:favorites;done=Array.isArray(d.done)?d.done:done;save();clean()};
  $("impSkip").onclick=clean}
