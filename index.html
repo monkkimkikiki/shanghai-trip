@@ -191,9 +191,9 @@ const WAIT={
 "상하이 타워 전망대":{g:"book",note:"예약하는 게 좋은 곳이에요.",when:"📅 방문일 전에 예약·예매 확인"}
 };
 const dp=p=>"https://www.dianping.com/search/keyword/1/0_"+encodeURIComponent(p.cn);
-function copyCn(id,btn){const p=places.find(x=>x.id===id);const done=()=>{btn.textContent="복사됨 ✓";setTimeout(()=>btn.textContent="중국어명 복사",1500)};
- const fb=()=>{const t=document.createElement("textarea");t.value=p.cn;document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(e){}t.remove();done()};
- try{navigator.clipboard.writeText(p.cn).then(done,fb)}catch(e){fb()}}
+function copyCn(id,btn){const p=places.find(x=>x.id===id);const cpt=p.type==="숙소"?p.cn+" 上海市黄浦区中山南一路428号":p.cn;const done=()=>{btn.textContent="복사됨 ✓";setTimeout(()=>btn.textContent="중국어명 복사",1500)};
+ const fb=()=>{const t=document.createElement("textarea");t.value=cpt;document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(e){}t.remove();done()};
+ try{navigator.clipboard.writeText(cpt).then(done,fb)}catch(e){fb()}}
 /* 지역 중심 좌표(위도, 경도) — 대략값 */
 const AREAS={"인민광장·난징동루":[31.2340,121.4770],"신천지":[31.2195,121.4758],"와이탄":[31.2397,121.4905],"예원":[31.2272,121.4925],"안푸루":[31.2100,121.4450],"푸동":[31.2397,121.4998],"주자각":[31.1100,121.0500],"티엔즈팡":[31.2085,121.4690],"정안사":[31.2236,121.4457],"옥불사":[31.2421,121.4448],"훙커우":[31.2740,121.4830],"정안 조이시티":[31.2400,121.4680],"오각장":[31.3030,121.5130]};
 const LODGE={name:"베이스플러스-빈장 서비스드 아파트먼트",cn:"basePLUS佰舍服务式公寓(上海世博会博物馆滨江店)",coord:[31.1990,121.4930]};
@@ -223,8 +223,9 @@ function orderItems(arr,pf,df){let l=arr.slice();if(viewMode==="fav-only")l=l.fi
  return l}
 function save(){store.set("sh_schedules",JSON.stringify(schedules));store.set("sh_favorites",JSON.stringify(favorites));store.set("sh_done",JSON.stringify(done));render()}
 const AMAP_PKG="com.autonavi.minimap",enc=encodeURIComponent;
-function amapWeb(p){return "https://www.amap.com/search?query="+enc(p.cn)}
-function amap(p){return `intent://poi?sourceApplication=shanghai-guide&keywords=${enc(p.cn)}&dev=0#Intent;scheme=androidamap;package=${AMAP_PKG};S.browser_fallback_url=${enc(amapWeb(p))};end`}
+const AQ=p=>p.type==="숙소"?"上海市黄浦区中山南一路428号":p.cn;
+function amapWeb(p){return "https://www.amap.com/search?query="+enc(AQ(p))}
+function amap(p){return `intent://poi?sourceApplication=shanghai-guide&keywords=${enc(AQ(p))}&dev=0#Intent;scheme=androidamap;package=${AMAP_PKG};S.browser_fallback_url=${enc(amapWeb(p))};end`}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
 /* ---------- 거리 · 이동수단 ---------- */
