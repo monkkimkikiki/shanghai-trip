@@ -60,9 +60,9 @@ footer{text-align:center;color:#87959a;font-size:11px;padding:20px}
 <div id="scheduleList"></div>
 <details class="card"><summary style="font-weight:800;cursor:pointer">📤 공유 · 백업 · 복원</summary>
 <div class="hint" style="margin:8px 0">4명이 각자 폰을 쓰니 일정은 자동 공유되지 않아요. 아래로 보내거나 백업해 두세요.</div>
-<div class="hint" style="margin:6px 0 8px">링크는 눌러서 <b>복사</b>해 카톡방에 붙여넣으세요. ‘일정 포함 링크’는 열면 내 일정을 불러올지 물어봐요.</div>
-<div class="actions"><button class="small outline" id="siteCopy" type="button">📋 사이트 주소 복사</button><button class="small outline" id="linkCopy" type="button">📋 일정 포함 링크 복사</button></div>
-<div class="actions"><button class="small" id="linkBtn" type="button">🔗 링크 공유 (카톡)</button></div>
+<div class="hint" style="margin:6px 0 8px">‘일정 포함 링크 공유’를 누르면 공유창이 떠서 카톡방에 바로 보낼 수 있어요. 받은 사람이 링크를 열면 일정을 불러올지 물어봐요. (공유창이 안 뜨면 링크가 복사돼요)</div>
+<div class="actions"><button class="small outline" id="siteCopy" type="button">📋 사이트 주소 복사</button></div>
+<div class="actions"><button class="small" id="linkBtn" type="button">🔗 일정 포함 링크 공유</button></div>
 <div class="actions"><button class="small" id="fileSave" type="button">📤 일정 저장 + 카톡 공유</button><button class="small outline" id="fileDl" type="button">💾 파일로만 저장</button><button class="small secondary" id="fileLoadBtn" type="button">📂 파일 불러오기</button><input type="file" id="fileLoad" accept=".json,application/json,text/plain" class="hidden"></div>
 <div class="hint" style="margin:4px 0 10px">‘저장 + 카톡 공유’를 누르면 공유창이 떠서 카톡방에 바로 올릴 수 있어요(안 뜨면 파일로 저장돼요). 받은 사람이 ‘파일 불러오기’로 고르면 <b>바로 적용</b>돼요. 적용 직후엔 ‘되돌리기’가 떠요.</div>
 <div class="actions"><button class="small" id="shareBtn">일정 텍스트 공유 (카톡 등)</button><button class="small secondary" id="backupBtn">백업 복사</button></div>
@@ -538,11 +538,10 @@ async function packData(o){const raw=new TextEncoder().encode(JSON.stringify(o))
 async function unpackData(t){if(t[0]==="z"){const ds=new Blob([b642bytes(t.slice(1))]).stream().pipeThrough(new DecompressionStream("deflate-raw"));return JSON.parse(new TextDecoder().decode(await new Response(ds).arrayBuffer()))}return JSON.parse(new TextDecoder().decode(b642bytes(t)))}
 const mkLink=async()=>siteBase()+"?s="+await packData({v:1,schedules,favorites,done});
 $("siteCopy").onclick=()=>copyText(siteBase(),$("siteCopy"),"📋 사이트 주소 복사");
-$("linkCopy").onclick=async()=>copyText(await mkLink(),$("linkCopy"),"📋 일정 포함 링크 복사");
 $("linkBtn").onclick=async()=>{const base=siteBase();if(!base)return;
  const url=await mkLink();
  if(navigator.share){try{await navigator.share({title:"상하이 여행 가이드",text:"상하이 여행 일정 · 누르면 일정이 담긴 사이트가 열려요",url});return}catch(e){if(e&&e.name==="AbortError")return}}
- copyText(url,$("linkBtn"),"🔗 링크 공유 (카톡)")};
+ copyText(url,$("linkBtn"),"🔗 일정 포함 링크 공유")};
 async function showImport(){let m=location.search.match(/[?&]s=([^&#]+)/)||location.hash.match(/^#s=(.+)$/);if(!m)return;let d;try{d=await unpackData(decodeURIComponent(m[1]))}catch(e){$("importBar").innerHTML='<div class="warn">링크의 일정 데이터를 읽지 못했어요. 링크가 중간에 잘렸을 수 있어요. 일정 파일로 받아 보세요.</div>';return}
  if(!d||!Array.isArray(d.schedules))return;
  $("importBar").innerHTML=`<div class="card" style="border:2px solid #236b78"><b>📩 공유된 일정이 있어요</b><div class="muted" style="margin:6px 0">일정 ${d.schedules.length}개 · 즐겨찾기 ${(d.favorites||[]).length}개. 불러올까요?</div><div class="actions"><button class="small" id="impMerge" type="button">내 일정에 합치기</button><button class="small secondary" id="impReplace" type="button">공유된 걸로 바꾸기</button><button class="small outline" id="impSkip" type="button">무시</button></div></div>`;
