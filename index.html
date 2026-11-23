@@ -573,6 +573,39 @@ let prepDone=load("sh_prep");
 function renderPrep(){let n=0,t=0;$("prepList").innerHTML=PREP.map(([h,l])=>`<h3 class="sech" style="margin-top:12px">${h}</h3>`+l.map(x=>{t++;const k=x,on=prepDone.includes(k);if(on)n++;return `<label style="display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:14px;line-height:1.5;${on?"opacity:.55;text-decoration:line-through":""}"><input type="checkbox" ${on?"checked":""} style="width:20px;height:20px;margin-top:2px;flex:none" onchange="prepTgl(${JSON.stringify(k).replace(/"/g,"&quot;")},this.checked)"><span>${esc(x)}</span></label>`}).join("")).join("");$("prepSum").textContent=`✈️ 출발 전 체크리스트 · 오프라인 안내 (${n}/${t})`}
 function prepTgl(k,on){prepDone=prepDone.filter(x=>x!==k);if(on)prepDone.push(k);store.set("sh_prep",JSON.stringify(prepDone));renderPrep()}
 
+/* 구글 시트 '일정' 탭 기본 일정 (시간은 순서에 맞춘 임시 배치, 예상하이 19:30만 시트 기준) */
+const T0="시간은 임의 배치예요";
+const SHEET_PLAN=[
+[0,"13:00","푸동국제공항 (PVG)","공항 → 숙소 이동 · 6인승 디디택시(편하고 쾌적, 짐 검사 없음) 또는 자기부상열차(빠름, 지하철 2호선 환승/택시 추가) · "+T0],
+[0,"15:00","베이스플러스-빈장 서비스드 아파트먼트","숙소 이동·체크인(14:00 이후) · "+T0],
+[0,"16:30","신천지","신천지 이동 · "+T0],
+[0,"17:30","점도덕","딤섬 · 위치 좋음 · 식사 · "+T0],
+[0,"19:00","난징동루","인민광장·난징동루 이동 구경 · "+T0],
+[0,"19:20","산동잡량전병","간식(노점) · "+T0],
+[0,"19:50","션다청","찹쌀떡·간식 (쑥/팥/흑임자) · "+T0],
+[0,"20:30","페이다추","식사 · 사천식 가정식(간이 센 편) · "+T0],
+[0,"22:00","베이스플러스-빈장 서비스드 아파트먼트","숙소 복귀 · "+T0],
+[1,"10:00","예원","이동 → 구경 · 예약 확인 · "+T0],
+[1,"11:30","남상만두","식사 · 고기·게살 샤오롱바오 · "+T0],
+[1,"13:30","주자각","이동(편도 택시 약 1시간) → 수로 근처 간식, 식사X · 반나절 · "+T0],
+[1,"19:30","예상하이","7시 30분 예약 · 저녁 식사(북경오리, 미슐랭)"],
+[1,"21:00","신천지","시간 남으면 골목 산책·구경 후 복귀 · "+T0],
+[2,"10:30","안푸루·우캉루","이동 → 카페 구경 · 왕홍 체험 · "+T0],
+[2,"11:30","알리멘타이","커피 + 간식(또는 근처 카페) · "+T0],
+[2,"13:30","레드립스","마라탕·마라반 식사 · "+T0],
+[2,"14:40","백련ZX 창취장","도심 이동 → 오타쿠 쇼핑 · "+T0],
+[2,"16:00","릴리안베이커리","포르투갈식 에그타르트 간식 · "+T0],
+[2,"17:30","헌지우이치엔","양꼬치 식사 · 웨이팅 김(일요일이 적은 편) · Dianping 원격 줄서기 · "+T0],
+[2,"20:00","와이탄","인민광장·난징동루에서 와이탄 이동 · 야경 구경 후 복귀 · "+T0],
+[3,"09:00","베이스플러스-빈장 서비스드 아파트먼트","숙소에서 배달로 식사 · "+T0],
+[3,"11:15","베이스플러스-빈장 서비스드 아파트먼트","11시~11시30분에 공항으로 출발"],
+[3,"12:15","푸동국제공항 (PVG)","공항 도착 · 출국 · "+T0]
+];
+function sheetPlan(){return SHEET_PLAN.map((r,i)=>{const p=places.find(x=>x.name===r[2]);return{id:"sp"+i,pid:p.id,day:DAYS[r[0]][0],slot:"시간 지정",time:r[1],title:p.name,area:p.area,cn:p.cn,memo:r[3]}})}
+(function(){const b=document.createElement("button");b.className="small secondary";b.type="button";b.id="sheetPlanBtn";b.textContent="📋 시트 기본 일정 넣기";$("fileSave").parentNode.appendChild(b);
+ b.onclick=()=>{const prev={schedules,done};schedules=sheetPlan();done=[];save();document.querySelector('[data-tab="schedule"]').click();$("importBar").innerHTML=`<div class="card" style="border:2px solid #236b78"><b>✅ 시트 일정 ${schedules.length}개를 넣었어요</b><div class="actions" style="margin-top:8px"><button class="small outline" id="undoSheet" type="button">되돌리기</button></div></div>`;$("undoSheet").onclick=()=>{({schedules,done}=prev);save();$("importBar").innerHTML=""}}})();
+if(!store.get("sh_seeded")&&!schedules.length){schedules=sheetPlan();store.set("sh_seeded","1");store.set("sh_schedules",JSON.stringify(schedules))}
+
 let storageOK=true;try{localStorage.setItem("_t","1");localStorage.removeItem("_t")}catch(e){storageOK=false}
 if(!storageOK)$("storeWarn").classList.remove("hidden");
 renderPrep();render();showImport();
