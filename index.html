@@ -60,8 +60,8 @@ footer{text-align:center;color:#87959a;font-size:11px;padding:20px}
 <div id="scheduleList"></div>
 <details class="card"><summary style="font-weight:800;cursor:pointer">📤 공유 · 백업 · 복원</summary>
 <div class="hint" style="margin:8px 0">4명이 각자 폰을 쓰니 일정은 자동 공유되지 않아요. 아래로 보내거나 백업해 두세요.</div>
-<div style="margin:6px 0 12px"><label>🌐 사이트 주소 (호스팅한 주소, 한 번만 입력)</label><div class="actions" style="margin-top:6px"><input id="siteUrl" placeholder="https://..." inputmode="url" style="flex:1"><button class="small outline" id="siteSave" type="button">저장</button></div>
-<div class="hint" style="margin-top:6px">여기에 사이트 주소를 넣으면 ‘링크 공유’가 <b>눌렀을 때 일정이 담긴 최신 사이트</b>로 열리는 링크를 만들어 줘요.</div></div>
+<div class="hint" style="margin:6px 0 8px">링크는 눌러서 <b>복사</b>해 카톡방에 붙여넣으세요. ‘일정 포함 링크’는 열면 내 일정을 불러올지 물어봐요.</div>
+<div class="actions"><button class="small outline" id="siteCopy" type="button">📋 사이트 주소 복사</button><button class="small outline" id="linkCopy" type="button">📋 일정 포함 링크 복사</button></div>
 <div class="actions"><button class="small" id="linkBtn" type="button">🔗 링크 공유 (카톡)</button></div>
 <div class="actions"><button class="small" id="fileSave" type="button">📤 일정 저장 + 카톡 공유</button><button class="small outline" id="fileDl" type="button">💾 파일로만 저장</button><button class="small secondary" id="fileLoadBtn" type="button">📂 파일 불러오기</button><input type="file" id="fileLoad" accept=".json,application/json,text/plain" class="hidden"></div>
 <div class="hint" style="margin:4px 0 10px">‘저장 + 카톡 공유’를 누르면 공유창이 떠서 카톡방에 바로 올릴 수 있어요(안 뜨면 파일로 저장돼요). 받은 사람이 ‘파일 불러오기’로 고르면 <b>바로 적용</b>돼요. 적용 직후엔 ‘되돌리기’가 떠요.</div>
@@ -531,11 +531,12 @@ $("restoreBtn").onclick=()=>{try{const d=JSON.parse($("restoreBox").value.trim()
 const SITE_URL="https://monkkimkikiki.github.io/shanghai-trip/";
 const b64e=o=>{const u=new TextEncoder().encode(JSON.stringify(o));let b="";u.forEach(c=>b+=String.fromCharCode(c));return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
 const b64d=t=>{t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const b=atob(t),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return JSON.parse(new TextDecoder().decode(u))};
-const siteBase=()=>(store.get("sh_site")||SITE_URL||"").trim().split("#")[0];
-$("siteUrl").value=store.get("sh_site")||SITE_URL||"";
-$("siteSave").onclick=()=>{const v=$("siteUrl").value.trim();if(v&&!/^https?:\/\//i.test(v)){$("siteSave").textContent="https://로 시작해야 해요";setTimeout(()=>$("siteSave").textContent="저장",1800);return}store.set("sh_site",v);$("siteSave").textContent="저장됨 ✓";setTimeout(()=>$("siteSave").textContent="저장",1500)};
-$("linkBtn").onclick=async()=>{const base=siteBase();if(!base){$("linkBtn").textContent="위에 사이트 주소를 먼저 넣어 주세요";setTimeout(()=>$("linkBtn").textContent="🔗 링크 공유 (카톡)",2200);return}
- const url=base+"#s="+b64e({v:1,schedules,favorites,done});
+const siteBase=()=>(SITE_URL||store.get("sh_site")||"").trim().split("#")[0];
+const mkLink=()=>siteBase()+"#s="+b64e({v:1,schedules,favorites,done});
+$("siteCopy").onclick=()=>copyText(siteBase(),$("siteCopy"),"📋 사이트 주소 복사");
+$("linkCopy").onclick=()=>copyText(mkLink(),$("linkCopy"),"📋 일정 포함 링크 복사");
+$("linkBtn").onclick=async()=>{const base=siteBase();if(!base)return;
+ const url=mkLink();
  if(navigator.share){try{await navigator.share({title:"상하이 여행 가이드",text:"상하이 여행 일정 · 누르면 일정이 담긴 사이트가 열려요",url});return}catch(e){if(e&&e.name==="AbortError")return}}
  copyText(url,$("linkBtn"),"🔗 링크 공유 (카톡)")};
 function showImport(){let m=location.hash.match(/^#s=(.+)$/);if(!m)return;let d;try{d=b64d(m[1])}catch(e){return}
