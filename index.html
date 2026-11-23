@@ -206,7 +206,7 @@ function load(k){try{return JSON.parse(store.get(k)||"[]")}catch(e){return[]}}
 const DAYS=[["1일 차","11/26(목)","2026-11-26"],["2일 차","11/27(금)","2026-11-27"],["3일 차","11/28(토)","2026-11-28"],["4일 차","11/29(일)","2026-11-29"]];
 const DATEMAP=Object.fromEntries(DAYS.map(d=>[d[2],d[0]]));
 const dl=d=>{const x=DAYS.find(v=>v[0]===d);return x?x[0]+" · "+x[1]:d};
-let schedules=load("sh_schedules"),favorites=load("sh_favorites"),done=load("sh_done"),filter="전체",currentPlace=null,mode="meal",meal="점심",anchorId="";
+let collapsed=load("sh_collapsed"),schedules=load("sh_schedules"),favorites=load("sh_favorites"),done=load("sh_done"),filter="전체",currentPlace=null,mode="meal",meal="점심",anchorId="";
 const $=id=>document.getElementById(id);
 const SHEET_IDS=places.filter(p=>!p.rec&&p.type!=="숙소"&&p.type!=="교통").map(p=>p.id);
 if(!store.get("sh_fav_init")){favorites=[...new Set([...favorites,...SHEET_IDS])];store.set("sh_fav_init","1");store.set("sh_favorites",JSON.stringify(favorites))}
@@ -253,7 +253,7 @@ function rank(s){const m={"아침":0,"점심":1,"오후":2,"저녁":3};if(s.slot
 function dayItems(d,extra){return [...schedules.filter(s=>s.day===d),...(extra?[extra]:[])].map((s,i)=>({s,i})).sort((a,b)=>rank(a.s)-rank(b.s)||a.i-b.i).map(x=>x.s)}
 function nearby(s,limit=8){
  const used=new Set(schedules.map(x=>x.title));
- return places.filter(p=>!used.has(p.name)).map(p=>({p,t:travel(s.area,p.area)})).filter(x=>x.t).sort((a,b)=>a.t.d-b.t.d||a.p.id-b.p.id).slice(0,limit)
+ return places.filter(p=>p.type==="숙소"||p.type==="교통"||!used.has(p.name)).map(p=>({p,t:travel(s.area,p.area)})).filter(x=>x.t).sort((a,b)=>a.t.d-b.t.d||a.p.id-b.p.id).slice(0,limit)
 }
 
 const TYPEUI={"맛집":["🍜","#e2693f","#f3a35c"],"카페":["☕","#8a6a4f","#c9a27c"],"관광":["🏯","#236b78","#4fa3a5"],"쇼핑":["🛍️","#a0528a","#d98ab8"],"덕질":["🎮","#5a54c9","#9a8cf0"],"숙소":["🏨","#3d5a80","#7a9cc6"],"교통":["✈️","#4a6fa5","#8fb3e0"]};
@@ -282,7 +282,7 @@ function schedHead(s){const pl=findPlace(s);return `<div class="row" style="just
 function render(){
 $("statSchedules").textContent=schedules.length;$("statDone").textContent=done.length;$("statFav").textContent=favorites.length;
 const days=[...DAYS.map(d=>d[0]),...[...new Set(schedules.map(s=>s.day))].filter(d=>!DAYS.some(v=>v[0]===d))];
-$("scheduleList").innerHTML=(schedules.length?"":'<div class="card" style="border:2px solid #236b78"><b>📋 아직 일정이 없어요</b><div class="muted" style="margin:6px 0">구글 시트의 일정(4일치)을 한 번에 넣을 수 있어요.</div><button class="small" type="button" onclick="applySheet()">시트 일정 넣기</button></div>')+days.map(d=>{const its=dayItems(d);return `<div class="dayhead row"><span>${esc(dl(d))}</span><button class="small outline" onclick="openCustom('${esc(d)}')">＋ 추가</button></div>`+(its.length?its.map((s,i,arr)=>(i>0?legHTML(arr[i-1],s):"")+`<article class="card ${done.includes(s.id)?"done":""}"><div class="topline"><span class="tag">${esc(s.slot)}</span><label style="margin:0;font-weight:600"><input type="checkbox" style="width:auto;vertical-align:middle" ${done.includes(s.id)?"checked":""} onchange="toggleDone('${s.id}')"> 방문 완료</label></div>${schedHead(s)}${s.memo?`<p class="muted">${esc(s.memo)}</p>`:""}<div class="actions"><button class="small" onclick="showNearby('${s.id}')">📍 근처 가까운 순</button><a class="btn small secondary" target="_blank" rel="noopener" href="${amap({cn:s.cn||s.title})}">Amap에서 검색 ↗</a><button class="small outline" onclick="removeSchedule('${s.id}')">삭제</button></div></article>`).join(""):'<div class="card muted">이 날은 아직 일정이 없어요. 장소 둘러보기에서 추가해 보세요.</div>')}).join("");
+$("scheduleList").innerHTML=(schedules.length?"":'<div class="card" style="border:2px solid #236b78"><b>📋 아직 일정이 없어요</b><div class="muted" style="margin:6px 0">구글 시트의 일정(4일치)을 한 번에 넣을 수 있어요.</div><button class="small" type="button" onclick="applySheet()">시트 일정 넣기</button></div>')+days.map(d=>{const its=dayItems(d);const col=collapsed.includes(d);return `<div class="dayhead row"><span class="dtog" onclick="toggleDay('${esc(d)}')" style="cursor:pointer;flex:1;user-select:none"><span class="arr">${col?"▶":"▼"}</span> ${esc(dl(d))} <small class="muted" style="font-weight:600">· ${its.length}개</small></span><button class="small outline" onclick="openCustom('${esc(d)}')">＋ 추가</button></div>`+(col?"":its.length?its.map((s,i,arr)=>(i>0?legHTML(arr[i-1],s):"")+`<article class="card ${done.includes(s.id)?"done":""}"><div class="topline"><span class="tag">${esc(s.slot)}</span><label style="margin:0;font-weight:600"><input type="checkbox" style="width:auto;vertical-align:middle" ${done.includes(s.id)?"checked":""} onchange="toggleDone('${s.id}')"> 방문 완료</label></div>${schedHead(s)}${s.memo?`<p class="muted">${esc(s.memo)}</p>`:""}<div class="actions"><button class="small" onclick="showNearby('${s.id}')">📍 근처 가까운 순</button><a class="btn small secondary" target="_blank" rel="noopener" href="${amap({cn:s.cn||s.title,type:(findPlace(s)||{}).type})}">Amap에서 검색 ↗</a><button class="small outline" onclick="removeSchedule('${s.id}')">삭제</button></div></article>`).join(""):'<div class="card muted">이 날은 아직 일정이 없어요. 장소 둘러보기에서 추가해 보세요.</div>')}).join("");
 
 /* 기준 일정 선택 */
 const anchorable=schedules.filter(s=>coord(s.area));
@@ -299,6 +299,7 @@ const GR=[["early","🌅 아침 일찍 가야 하는 곳"],["long","⏳ 웨이�
 $("waitList").innerHTML=GR.map(([g,t])=>{const l=places.filter(p=>WAIT[p.name]&&WAIT[p.name].g===g);return l.length?`<h3 class="sech">${t}</h3>`+l.map(p=>{const w=WAIT[p.name];return `<article class="card"><div class="place">${esc(p.name)}${tags(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.area)} · ${esc(p.cn)}</div><div class="wnote">${esc(w.note)}</div><div class="tip">${esc(w.when)}</div>${tipl(p)}<div class="actions"><button class="small" onclick="openAdd(${p.id})">＋ 일정에 추가</button><a class="btn small secondary" target="_blank" rel="noopener" href="${dp(p)}">대중점평 ↗</a><button class="small secondary" onclick="copyCn(${p.id},this)">중국어명 복사</button><a class="btn small outline" target="_blank" rel="noopener" href="${amap(p)}">Amap ↗</a></div></article>`}).join(""):""}).join("");
 $("favoriteList").innerHTML=favorites.length?places.filter(p=>favorites.includes(p.id)).map(p=>`<article class="card"><div class="place">${esc(p.name)}${tags(p)}</div><div class="muted">${esc(p.area)} · ${esc(p.desc)}</div>${tipl(p)}<div class="actions"><button class="small" onclick="openAdd(${p.id})">일정에 추가</button><button class="small secondary" onclick="toggleFav(${p.id})">즐겨찾기 해제</button></div></article>`).join(""):'<div class="card muted">즐겨찾기한 장소가 없습니다.</div>';
 }
+function toggleDay(d){collapsed=collapsed.includes(d)?collapsed.filter(x=>x!==d):[...collapsed,d];store.set("sh_collapsed",JSON.stringify(collapsed));render()}
 function toggleDone(id){done=done.includes(id)?done.filter(x=>x!==id):[...done,id];save()}
 function removeSchedule(id){schedules=schedules.filter(s=>s.id!==id);done=done.filter(x=>x!==id);save()}
 function toggleFav(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];save()}
@@ -590,6 +591,7 @@ const SHEET_PLAN=[
 [1,"13:30","주자각","이동(편도 택시 약 1시간) → 수로 근처 간식, 식사X · 반나절 · "+T0],
 [1,"19:30","예상하이","7시 30분 예약 · 저녁 식사(북경오리, 미슐랭)"],
 [1,"21:00","신천지","시간 남으면 골목 산책·구경 후 복귀 · "+T0],
+[1,"22:15","베이스플러스-빈장 서비스드 아파트먼트","숙소 복귀 · "+T0],
 [2,"10:30","안푸루·우캉루","이동 → 카페 구경 · 왕홍 체험 · "+T0],
 [2,"11:30","알리멘타이","커피 + 간식(또는 근처 카페) · "+T0],
 [2,"13:30","레드립스","마라탕·마라반 식사 · "+T0],
@@ -597,6 +599,7 @@ const SHEET_PLAN=[
 [2,"16:00","릴리안베이커리","포르투갈식 에그타르트 간식 · "+T0],
 [2,"17:30","헌지우이치엔","양꼬치 식사 · 웨이팅 김(일요일이 적은 편) · Dianping 원격 줄서기 · "+T0],
 [2,"20:00","와이탄","인민광장·난징동루에서 와이탄 이동 · 야경 구경 후 복귀 · "+T0],
+[2,"22:30","베이스플러스-빈장 서비스드 아파트먼트","숙소 복귀 · "+T0],
 [3,"09:00","베이스플러스-빈장 서비스드 아파트먼트","숙소에서 배달로 식사 · "+T0],
 [3,"11:15","베이스플러스-빈장 서비스드 아파트먼트","11시~11시30분에 공항으로 출발"],
 [3,"12:15","푸동국제공항 (PVG)","공항 도착 · 출국 · "+T0]
