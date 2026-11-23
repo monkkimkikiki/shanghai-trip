@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#18313d">
+<meta name="mobile-web-app-capable" content="yes">
+<title>상하이 여행 가이드</title>
+<style>
+:root{--ink:#19313c;--muted:#71818a;--line:#e5eaec;--bg:#f5f7f7;--white:#fff;--accent:#236b78;--soft:#eaf2f2;--gold:#c48c42}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+header{background:var(--ink);color:white;padding:25px 18px 20px;border-radius:0 0 22px 22px}
+.eyebrow{font-size:11px;letter-spacing:1.5px;color:#b9cbd0;font-weight:700}.hero{font-size:27px;font-weight:850;margin:8px 0 4px}.sub{font-size:13px;color:#d0dce0}
+.stats{display:flex;gap:9px;margin-top:18px}.stat{background:#294752;border-radius:12px;padding:10px 12px;flex:1}.stat b{display:block;font-size:21px}.stat span{font-size:11px;color:#d1dfe2}
+main{max-width:720px;margin:auto;padding:15px 14px 40px}.tabs{display:flex;gap:7px;margin:0 0 16px}.tab{border:0;background:#e7eded;color:#52656c;border-radius:10px;padding:11px 9px;flex:1;font-weight:750}.tab.active{background:var(--ink);color:white}
+h2{font-size:19px;margin:10px 0 5px}.hint{color:var(--muted);font-size:12px;line-height:1.5}
+.dayhead{font-size:17px;font-weight:850;margin:20px 0 9px}.card{background:white;border:1px solid var(--line);border-radius:15px;padding:14px;margin:9px 0}.topline{display:flex;justify-content:space-between;align-items:center;gap:8px}.tag{font-size:11px;color:var(--accent);background:var(--soft);border-radius:20px;padding:5px 9px;font-weight:750}.place{font-size:16px;font-weight:850;margin:8px 0 3px}.muted{font-size:12px;color:var(--muted)}.actions{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+button,.btn{cursor:pointer;border:0;border-radius:10px;padding:10px 12px;font-weight:750;font-size:13px;background:var(--ink);color:white;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:5px}.btn.secondary,button.secondary{background:#edf1f2;color:#435960}.btn.outline,button.outline{background:white;border:1px solid var(--line);color:var(--ink)}
+button.small,.btn.small{padding:8px 10px;font-size:12px}.filters{display:flex;gap:6px;overflow:auto;padding:10px 0}.filter{white-space:nowrap;background:#e8eeee;color:#53656b}.filter.active{background:var(--accent);color:white}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.placeinfo{flex:1;min-width:0}.heart{background:#f5f7f7;color:#a45c5c;padding:8px 10px}
+form{display:grid;gap:11px}label{display:block;font-size:12px;font-weight:800;margin-bottom:5px;color:#4d626a}input,select,textarea{width:100%;padding:12px;border:1px solid #dce4e6;border-radius:10px;background:white;color:var(--ink);font:inherit;font-size:14px}textarea{min-height:72px;resize:vertical}.choices{display:flex;gap:7px;flex-wrap:wrap}.choice{background:#edf1f2;color:#52656c}.choice.selected{background:var(--accent);color:white}
+.modal{position:fixed;inset:0;background:#10232bb8;display:none;align-items:flex-end;justify-content:center;padding:12px;z-index:5}.modal.open{display:flex}#nearModal{z-index:6}#whyModal{z-index:8}.rec[onclick]{cursor:pointer}.whybox{border-radius:12px;padding:11px 12px;margin-top:10px;font-size:13px;line-height:1.6}.whybox b{display:block;font-size:12px;margin-bottom:3px}.wy1{background:#fff8e9;border:1px solid #f0dfbd}.wy2{background:#eef6f7;border:1px solid #cfe3e6}.wy3{background:#f3f0fb;border:1px solid #ddd6f3}.sheet{background:white;border-radius:20px 20px 15px 15px;padding:20px;width:min(100%,520px);max-height:90vh;overflow:auto}.sheet h2{margin-top:0}.close{float:right;background:#edf1f2;color:#40555d}.hidden{display:none!important}.done{opacity:.55}.done .place{text-decoration:line-through}.notice{background:#fff8e9;border:1px solid #f0dfbd;border-radius:12px;padding:12px;font-size:12px;color:#72572d;line-height:1.5;margin-top:14px}
+/* 이동 정보 */
+.leg{display:flex;flex-wrap:wrap;align-items:center;gap:5px 10px;margin:2px 0 2px 16px;padding:7px 10px;border-left:3px dashed #b9cbd0;font-size:12px;color:#4d626a}
+.legmain{font-weight:800;color:var(--accent)}.legalt,.legd{color:var(--muted)}.leg .btn{margin-left:auto}
+.hintbox{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.7;color:#2c5560}
+.badge{display:inline-block;font-size:11px;font-weight:750;color:#2c5560;background:var(--soft);border-radius:20px;padding:4px 9px;margin-top:6px}
+.sech{font-size:14px;margin:16px 0 2px}.rec{font-size:10px;color:#8a5a14;background:#fff1d6;border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:middle}
+.tip{font-size:12px;color:#2c5560;background:var(--soft);border-radius:8px;padding:6px 9px;margin-top:6px;line-height:1.5}.bk{color:#9a2f2f;background:#fde6e6}
+.tabs{overflow-x:auto}.tab{flex:none;white-space:nowrap;padding:11px 14px;font-size:13px}.ptime{font-weight:800;color:var(--accent)}.free{font-size:12px;color:var(--muted);margin:2px 0 2px 16px;padding:4px 10px;border-left:3px dotted #cdd8db}.pday{background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px;margin:18px 0 8px}.pday small{display:block;color:#c9d9dd;font-size:11px;margin-top:3px;line-height:1.5}.wt{color:#1f5f86;background:#e1f0fb}.wnote{font-size:12px;line-height:1.6;margin-top:6px}
+.thumb{flex:none;width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff}
+.pv{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:10px 0 4px;background:#fff}.banner{height:84px;display:flex;align-items:flex-end;justify-content:space-between;padding:10px 14px;color:#fff}.banner span{font-size:40px;line-height:1}.banner b{font-size:12px;background:#0003;border-radius:20px;padding:4px 10px}.pvb{padding:12px 14px}.pvb .actions{margin-top:10px}
+#pickModal{z-index:7}.pick{display:flex;gap:10px;align-items:flex-start}.pick .info{flex:1;min-width:0}
+*{-webkit-tap-highlight-color:transparent}button,.btn,summary,select{touch-action:manipulation}.fv{color:#b24a4a;background:#fdeaea}.warn{background:#fdecec;border:1px solid #f3c4c4;color:#8a2c2c;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin:12px 0}
+footer{text-align:center;color:#87959a;font-size:11px;padding:20px}
+@media(min-width:600px){main{padding-top:22px}.modal{align-items:center}.sheet{border-radius:18px}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">PRIVATE TRAVEL GUIDE · SHANGHAI</div><div class="hero">상하이 여행 가이드</div><div class="sub">우리끼리 편하게 저장하고 찾아보는 4인 여행 노트</div>
+<div class="stats"><div class="stat"><b id="statSchedules">0</b><span>등록 일정</span></div><div class="stat"><b id="statDone">0</b><span>방문 완료</span></div><div class="stat"><b id="statFav">0</b><span>즐겨찾기</span></div></div></header>
+<main>
+<nav class="tabs"><button class="tab active" data-tab="schedule">여행 일정</button><button class="tab" data-tab="places">장소 둘러보기</button><button class="tab" data-tab="favorites">즐겨찾기</button><button class="tab" data-tab="wait">⏳ 웨이팅</button><button class="tab" data-tab="plan">🤖 AI 계획</button></nav>
+<section id="schedule">
+<div class="row"><div><h2>여행 일정</h2><div class="hint">장소에서 바로 일정을 추가할 수 있어요. 일정 사이 이동수단은 자동으로 계산돼요.</div></div><button id="addCustom">＋ 일정 추가</button></div>
+<details class="card" style="margin-top:12px"><summary style="font-weight:800;cursor:pointer">✈️ 출발 전 체크 · 이동 팁</summary>
+<div class="hint" style="line-height:1.8;margin-top:8px">
+<b>결제</b> 알리페이, 위챗페이<br>
+<b>통신</b> VPN 되는 유심(또는 VPN)<br>
+<b>지도·택시</b> 고덕지도(Amap), 디디추싱(알리페이 연동)<br>· Amap은 <a href="https://play.google.com/store/apps/details?id=com.autonavi.minimap" target="_blank" rel="noopener">Google Play의 AMap Global ↗</a>(영어 UI 지원)를 받아 두면 이 가이드의 ‘경로’·‘Amap 검색’ 버튼이 앱으로 바로 열려요.<br>
+<b>공항 → 시내</b><br>
+· 6인승 디디택시: 편하고 쾌적, 짐 검사 필요 없음<br>
+· 자기부상열차: 빠름, 지하철 2호선으로 갈아타거나 택시를 추가로 이용<br>
+<b>예약하면 좋은 곳</b> 예원, 동방명주, 상하이 타워, 성용싱, 예상하이<br>
+<b>덕질 동선</b> 인민광장 → 난징동루 → 와이탄(도보)
+</div></details>
+<div id="importBar"></div>
+<details class="card" id="prep"><summary style="font-weight:800;cursor:pointer" id="prepSum">✈️ 출발 전 체크리스트 · 오프라인 안내</summary><div class="hint" style="margin:8px 0;line-height:1.7">이 앱은 <b>열 때 인터넷이 필요 없어요.</b> 일정·계산·메모는 폰 안에서 돌아가요. 다만 <b>Amap 길찾기·대중점평·카톡 전송</b>은 인터넷이 필요해요. <b>한국에서 미리</b> 아래를 확인해 두세요.</div><div id="prepList"></div><div class="notice">크롬이 아닌 카톡 미리보기·파일 뷰어로 열면 일정이 저장되지 않을 수 있어요. 꼭 <b>Chrome</b>으로 열고, 중간중간 ‘일정 저장’으로 파일을 남겨 두세요.</div></details>
+<div id="storeWarn" class="warn hidden">⚠️ 이 화면에서는 일정이 저장되지 않아요. 파일을 <b>Chrome</b>으로 열거나, 아래 ‘공유·백업’으로 일정을 카톡 등에 보내 두세요.</div>
+<div id="scheduleList"></div>
+<details class="card"><summary style="font-weight:800;cursor:pointer">📤 공유 · 백업 · 복원</summary>
+<div class="hint" style="margin:8px 0">4명이 각자 폰을 쓰니 일정은 자동 공유되지 않아요. 아래로 보내거나 백업해 두세요.</div>
+<div style="margin:6px 0 12px"><label>🌐 사이트 주소 (호스팅한 주소, 한 번만 입력)</label><div class="actions" style="margin-top:6px"><input id="siteUrl" placeholder="https://..." inputmode="url" style="flex:1"><button class="small outline" id="siteSave" type="button">저장</button></div>
+<div class="hint" style="margin-top:6px">여기에 사이트 주소를 넣으면 ‘링크 공유’가 <b>눌렀을 때 일정이 담긴 최신 사이트</b>로 열리는 링크를 만들어 줘요.</div></div>
+<div class="actions"><button class="small" id="linkBtn" type="button">🔗 링크 공유 (카톡)</button></div>
+<div class="actions"><button class="small" id="fileSave" type="button">📤 일정 저장 + 카톡 공유</button><button class="small outline" id="fileDl" type="button">💾 파일로만 저장</button><button class="small secondary" id="fileLoadBtn" type="button">📂 파일 불러오기</button><input type="file" id="fileLoad" accept=".json,application/json,text/plain" class="hidden"></div>
+<div class="hint" style="margin:4px 0 10px">‘저장 + 카톡 공유’를 누르면 공유창이 떠서 카톡방에 바로 올릴 수 있어요(안 뜨면 파일로 저장돼요). 받은 사람이 ‘파일 불러오기’로 고르면 <b>바로 적용</b>돼요. 적용 직후엔 ‘되돌리기’가 떠요.</div>
+<div class="actions"><button class="small" id="shareBtn">일정 텍스트 공유 (카톡 등)</button><button class="small secondary" id="backupBtn">백업 복사</button></div>
+<textarea id="restoreBox" placeholder="백업한 내용을 여기에 붙여넣고 ‘복원’을 누르세요" style="margin-top:10px"></textarea>
+<div class="actions"><button class="small outline" id="restoreBtn">복원</button></div></details>
+<div class="notice">일정과 즐겨찾기는 현재 이 기기의 브라우저에 저장됩니다. 다른 사람의 휴대폰과 자동 공유되지는 않습니다. 안드로이드는 <b>Chrome</b>으로 파일을 열어야 저장돼요(파일 앱·메신저 미리보기에서는 저장이 안 될 수 있어요). 여행 전에 필요한 정보를 미리 열어두세요.<br>이동 시간·거리는 지역 중심 좌표 기준 <b>대략적인 추정치</b>예요. 실제 경로는 ‘경로 ↗’(Amap)에서 확인하세요.</div>
+</section>
+<section id="places" class="hidden">
+<h2>맛집 · 관광 · 쇼핑</h2><div class="hint">장소를 고른 뒤 ‘일정에 추가’를 누르면 아침·점심·저녁 또는 새 일정을 지정할 수 있어요.</div>
+<input id="q" placeholder="🔍 장소 검색 (이름 · 중국어 · 지역 · 메뉴)" style="margin-top:10px">
+<div class="filters" id="filters"></div>
+<div id="modeChips"></div>
+<div style="margin-bottom:6px"><label>📍 이 일정에서 가까운 순으로 보기</label><select id="anchorSel"></select></div>
+<div id="placeList"></div>
+</section>
+<section id="wait" class="hidden"><h2>웨이팅 · 예약 특수 지역</h2><div class="hint">오래 기다리거나 미리 잡아야 하는 곳만 따로 모았어요. 정보는 시트와 웹 후기 기준이라 현장 상황은 달라질 수 있어요.</div>
+<details class="card" open><summary style="font-weight:800;cursor:pointer">📲 원격 대기·예약 방법</summary><div class="hint" style="line-height:1.8;margin-top:8px">
+· <b>대중점평(大众点评, Dianping)</b>: 가게 페이지에서 원격 대기(在线排队)·예약 가능한 곳이 있어요. 앱 대신 <b>위챗 → 검색 → ‘大众点评’ → 미니프로그램</b>으로도 열 수 있어요.<br>
+· <b>위챗 검색</b>: 가게 중국어 이름을 검색하면 원격 줄서기를 지원하는 곳이 있어요(헌지우이치엔 후기 기준). 아래 ‘중국어명 복사’ 버튼을 쓰세요.<br>
+· <b>메이웨이부용덩(美味不用等)</b>: 원격 대기에 특화된 앱이에요.<br>
+· 안드로이드는 <b>위챗 미니프로그램</b>이 가장 간단해요. 대중점평 앱(패키지명 com.dianping.v1)이 Google Play에 있는지는 확인하지 못했어요. 스토어에서 ‘Dianping’을 검색해 개발사가 Meituan인지 확인하고, 없으면 미니프로그램을 쓰세요.<br>
+· 가입·인증에 해외 번호나 카드가 되는지는 확인하지 못했어요. 출발 전에 미리 가입해 보세요.
+</div></details>
+<div id="waitList"></div></section>
+<section id="plan" class="hidden"><h2>🤖 AI가 짜주는 계획</h2>
+<div class="hint">숙소 위치를 넣으면 거리 · 이동시간 · 웨이팅 · 음식 종류를 계산해서 4일 일정을 추천해 줘요. 인터넷이나 AI 서버 없이 폰 안에서 규칙으로 계산하는 자동 추천이라, 영업시간과 예약은 직접 확인해야 해요.</div>
+<div class="card" style="display:grid;gap:12px">
+<div><label>숙소 이름 (선택)</label><input id="lgName" placeholder="예: ○○호텔 난징동루"><div class="actions"><a id="lgAmap" class="btn small outline hidden" target="_blank" rel="noopener">Amap에서 숙소 찾기 ↗</a></div></div>
+<div><label>숙소가 있는 지역 *</label><select id="lgArea"></select></div>
+<div><label>정확한 좌표 (선택)</label><input id="lgCoord" placeholder="31.2304, 121.4737"><div class="hint">Amap에서 숙소를 찾아 위치를 길게 눌러 복사한 좌표를 붙여넣으면 더 정확해요.</div></div>
+<div><label>🛬 1일 차 출발 위치 → 도착 공항 · 착륙 시간</label><div class="row" style="gap:8px"><select id="lgIn" style="flex:1.5"></select><input type="time" id="lgArr" value="14:00" style="flex:1"></div></div>
+<div><label>🛫 4일 차 복귀 위치(숙소 → 공항) · 비행기 출발 시간</label><div class="row" style="gap:8px"><select id="lgOut" style="flex:1.5"></select><input type="time" id="lgDep" value="18:00" style="flex:1"></div><div class="hint">공항 ↔ 숙소 이동시간은 숙소 위치를 기준으로 자동 계산해요(택시 기준, 입국 약 1시간·출국 수속 2시간 반 가정).</div></div>
+<div><label>일정 강도</label><div class="choices" id="paceChips"></div></div>
+<div><label>넣고 싶은 것</label><div class="choices" id="optChips"></div></div>
+<div><label>좋아하는 음식 (여러 개 선택 · 안 고르면 골고루)</label><div class="choices" id="genreChips"></div></div>
+<button type="button" id="planGo" style="width:100%">✨ 계획 짜기</button>
+<div id="planMsg" class="hint"></div></div>
+<div id="planOut"></div></section>
+<section id="favorites" class="hidden"><h2>내 즐겨찾기</h2><div class="hint">이 기기에서 개인적으로 관리하는 목록입니다.</div><div id="favoriteList"></div></section>
+</main>
+<footer>상하이 여행 가이드 · 오프라인용 기본 정보 포함</footer>
+
+<div class="modal" id="modal"><div class="sheet">
+<button class="close" id="closeModal">닫기</button><h2 id="modalTitle">일정에 추가하기</h2><div class="hint" id="modalPlace"></div><form id="scheduleForm">
+<div><label>추가 방식</label><div class="choices"><button type="button" class="choice selected" data-mode="meal">끼니에 추가</button><button type="button" class="choice" data-mode="new">새로운 일정</button><button type="button" class="choice" data-mode="time">날짜·시간 지정</button></div></div>
+<div id="areaField" class="hidden"><label>위치(지역)</label><select id="newArea"></select></div>
+<div id="mealFields"><label>여행 일차</label><select id="mealDay"><option>1일 차</option><option>2일 차</option><option>3일 차</option><option>4일 차</option><option>5일 차</option></select><label style="margin-top:9px">끼니</label><div class="choices" id="mealChoices"><button type="button" class="choice" data-meal="아침">아침</button><button type="button" class="choice selected" data-meal="점심">점심</button><button type="button" class="choice" data-meal="저녁">저녁</button><button type="button" class="choice" data-meal="오후">오후</button></div></div>
+<div id="newFields" class="hidden"><label>일정 이름</label><input id="newTitle" placeholder="예: 예원 주변 산책"><label style="margin-top:9px">여행 일차</label><select id="newDay"><option>1일 차</option><option>2일 차</option><option>3일 차</option><option>4일 차</option><option>5일 차</option></select></div>
+<div id="timeFields" class="hidden"><label>날짜</label><input type="date" id="customDate"><label style="margin-top:9px">시간</label><input type="time" id="customTime" value="14:00"></div>
+<div id="legHint" class="hintbox hidden"></div>
+<div><label>메모 (선택)</label><textarea id="memo" placeholder="예약 여부, 먹을 메뉴, 방문 팁 등"></textarea></div>
+<button type="button" id="submitBtn" style="width:100%">일정에 추가하기</button></form></div></div>
+
+<div class="modal" id="pickModal"><div class="sheet">
+<button class="close" id="closePick">닫기</button><h2>장소 고르기</h2><div class="hint">등록된 장소 중에서 골라요. 누르면 정보가 일정 추가 창에 바로 채워져요.</div>
+<input id="pickQ" placeholder="🔍 이름 · 중국어 · 지역 · 메뉴" style="margin-top:10px"><div id="pickModes"></div><div class="filters" id="pickFilters"></div><div id="pickList"></div></div></div>
+
+<div class="modal" id="nearModal"><div class="sheet">
+<button class="close" id="closeNear">닫기</button><h2 id="nearTitle">근처 장소</h2><div class="hint" id="nearSub"></div><div id="nearList"></div></div></div>
+
+<div class="modal" id="whyModal"><div class="sheet"><button class="close" id="closeWhy">닫기</button><h2 id="whyTitle"></h2><div id="whyBody"></div></div></div>
+
+<script>
+const places=[
+["헌지우이치엔","很久以前羊肉串","맛집","인민광장·난징동루","양꼬치 · 잡내 없음. 일요일이 웨이팅 적은 편(그래도 3시간쯤)",0,"인민광장·난징동루 쪽이 가장 유명"],
+["예상하이","夜上海","맛집","신천지","북경오리 · 미슐랭이지만 현지 입맛이라 호불호 있음",0,"신천지 근처",1],
+["점도덕","点都德","맛집","신천지","딤섬 · 위치 좋음",0,"신천지 근처"],
+["페이다추","费大厨辣椒炒肉","맛집","인민광장·난징동루","사천식 로컬 가정식 · 제육볶음 느낌, 간이 센 편",0,"인민광장·난징동루 인근(도심)"],
+["라이라이샤오롱","莱莱小笼","맛집","인민광장·난징동루","샤오롱바오 맛집 · 공간이 협소함",0,"인민광장·난징동루 인근(도심)"],
+["하이디라오","海底捞火锅","맛집","인민광장·난징동루","훠궈 · 현지의 맛",0,"인민광장·난징동루 쪽이 가장 유명"],
+["산동잡량전병","山东杂粮煎饼","맛집","인민광장·난징동루","전병 · 간식(노점)",0,"인민광장·난징동루 인근(도심)"],
+["레드립스","红唇串串香","맛집","인민광장·난징동루","마라탕·마라반 · 향신료 엄청 심하지 않음",0,"인민광장·난징동루 인근(도심)"],
+["션다청","沈大成","맛집","인민광장·난징동루","찹쌀떡·딤섬 · 150년 노포, 쑥·팥·흑임자 찹쌀떡이 유명. 간식 정도가 적당",0,"인민광장·난징동루 인근(도심)"],
+["릴리안베이커리","莉莲蛋挞","맛집","인민광장·난징동루","베이커리 · 포르투갈식 에그타르트가 유명",0,"인민광장·난징동루 인근(도심)"],
+["그랜드마더","上海姥姥家常饭馆","맛집","와이탄","가정식 · 동파육, 마파두부 맛",0,"와이탄 근처"],
+["남상만두","南翔馒头店","맛집","예원","만두 · 고기·게살 샤오롱바오가 유명",0,"예원 근처"],
+["천지슌허","陈记顺和牛肉火锅","맛집","인민광장·난징동루","훠궈 · 맑은 육수로 유명",0,"인민광장·난징동루 인근(도심)"],
+["지아지아 탕바오","佳家汤包","맛집","인민광장·난징동루","샤오롱바오 · 일찍 품절되는 경우 있음(일찍 가기)",0,"인민광장·난징동루 인근(도심)"],
+["알리멘타이","alimentari","카페","안푸루","카페 · 브런치, 커피 적당",0,"안푸루"],
+["헤이티","喜茶","카페","미정","음료 · 배달 가능",0,"위치 미정"],
+["성용싱","成隆行蟹王府","맛집","미정","털게 전문점",0,"위치 미정",1],
+["이백해","李百蟹","맛집","미정","게살국수",0,"위치 미정"],
+["뤄춘궈","罗春阁生煎","맛집","미정","셩지엔바오",0,"위치 미정"],
+["양쯔간루","满记甜品","맛집","미정","과일 · 디저트 (중국어 상호 확인 필요)",0,"위치 미정"],
+["소양생전","小杨生煎","맛집","미정","성젠바오(군만두)",0,"위치 미정"],
+["런허관","人和馆","맛집","미정","게살국수",0,"위치 미정"],
+["상하이탄","上海滩餐厅","맛집","미정","북경오리",0,"위치 미정"],
+["홈즈","HOME'S私房菜","맛집","미정","홍소육",0,"위치 미정"],
+["예원","豫园","관광","예원","전통 정원 · 낮 콘텐츠로 추천",0,"예원상청·남상만두와 한 코스",1],
+["안푸루·우캉루","安福路·武康路","관광","안푸루","왕홍 거리 · 산책, 카페",0,"안푸루 카페(알리멘타이)와 묶기"],
+["신천지","新天地","관광","신천지","프랑스 조계지라 근대 느낌 · 임시정부가 있음",0,"예상하이·점도덕 근처"],
+["난징동루","南京东路","쇼핑","인민광장·난징동루","쇼핑·야경·맛집 · 거리 구경",0,"인민광장 → 난징동루 → 와이탄 도보 루트(오타쿠 쇼핑 동선)"],
+["와이탄","外滩","관광","와이탄","야경·강변 산책",0,"난징동루에서 도보로 연결"],
+["푸동 신구","浦东新区","관광","푸동","동방명주·상하이 타워·쇼핑(오타쿠 X)",0,"동방명주·상하이 타워는 예약 권장",1],
+["주자각","朱家角古镇","관광","주자각","수향 마을 · 간식만 먹고 식사는 X, 반나절 코스",0,"편도 택시 약 1시간 · 왕복 인당 약 2만원 수준"],
+["대한민국 임시정부 청사","大韩民国临时政府旧址","관광","신천지","상하이 임시정부 유적 · 관람 전 운영시간 확인",1,"신천지에서 도보권"],
+["티엔즈팡","田子坊","관광","티엔즈팡","타이캉루 골목 · 스쿠먼 건축 + 공방·카페·소품 가게, 1~2시간",1,"신천지 인근 타이캉루"],
+["상하이 박물관","上海博物馆","관광","인민광장·난징동루","청동기·도자기 전시 · 무료(예약 필요할 수 있음)",1,"인민광장 바로 옆"],
+["예원상청","豫园商城","쇼핑","예원","먹거리·기념품 거리",1,"예원과 같이 묶기"],
+["황푸강 유람선","黄浦江游船","관광","와이탄","양안 야경 · 저녁 6~9시 추천",1,"와이탄 선착장"],
+["동방명주","东方明珠","관광","푸동","푸동 랜드마크 타워 · 야경 전망",1,"푸동 · 예약 권장",1],
+["상하이 타워 전망대","上海中心大厦","관광","푸동","푸동 최고층 전망 · 날씨 좋은 날 추천",1,"푸동 · 예약 권장",1],
+["정안사","静安寺","관광","정안사","도심 속 사찰",1,"난징시루 쇼핑가 근처"],
+["옥불사","玉佛寺","관광","옥불사","옥불상으로 유명한 사찰",1,"안위안루"],
+["홍커우 공원(루쉰공원)","鲁迅公园","관광","훙커우","윤봉길 의사 의거 장소 · 매헌 · 윤봉길 의사 기념관",1,"도심에서 약간 떨어짐"],
+["화이하이중루","淮海中路","쇼핑","신천지","프랑스 조계지 쇼핑 거리",1,"신천지에서 이어짐"],
+["백련ZX 창취장","百联ZX创趣场","덕질","인민광장·난징동루","'상하이 아키하바라' · 반다이·메가하우스, 원신 굿즈, 애니메이트, 콜라보 카페(층 구성은 바뀔 수 있음)",1,"난징동루 340-372호 · 난징동루역 1번 출구 바로 앞"],
+["제일백화점 4층","第一百货","덕질","인민광장·난징동루","백화점 4층이 애니 굿즈 구역 · 창취장과 도보 연결",1,"난징동루 800호 일대 (정확한 위치는 Amap 확인)"],
+["팝마트 난징동루점","泡泡玛特 南京东路","덕질","인민광장·난징동루","약 800㎡ 2층, 도심 최대급 팝마트",1,"스마오광장 1~2층 · 인민광장역 19번 출구 앞"],
+["디메이플라자","迪美购物","덕질","인민광장·난징동루","인민광장 지하몰 · 공식/중고/동인 굿즈, 로리타 의상, 구체관절인형",1,"원하는 걸 못 찾았을 때 마지막으로 들르기 좋음(SNS 후기)"],
+["정안 조이시티","静安大悦城","덕질","정안 조이시티","2017년 중국 첫 애니 전문 구역 i-LAND · 팝업·전시가 자주 열림",1,"시짱베이루 198호 · 취푸루역 직결, 방문 전 행사 확인"],
+["백련ZX 조취장","造趣场","덕질","오각장","창취장보다 약 2배 넓은 굿즈몰(SNS 후기)",1,"10호선 오각장역 · 도심에서 멀어 따로 반나절"],
+["basePLUS佰舍服务式公寓 (엑스포 박물관 강변점)","basePLUS佰舍服务式公寓(上海世博会博物馆滨江店)","숙소","숙소","상하이 엑스포 박물관 강변점 · 中山南一路 428号 (No. 428 Zhongshan South 1st Road, 황푸구)",0,"푸동공항(PVG) 이용 · 위치는 주소 기준 대략값이라 Amap에서 정확한 지점 확인"],
+["푸동국제공항 (PVG)","上海浦东国际机场","교통","푸동공항","상하이 입·출국 공항 · 도착 T1/T2 · 시내까지 택시 약 1시간, 磁悬浮+지하철 2호선도 가능",0,"공항→숙소/시내: 디디추싱(滴滴) 또는 공항 택시 승강장 · 지하철 2호선·마그레브(磁悬浮)는 룽양루역에서 환승 · 출국은 최소 2시간 30분 전 도착 권장 · 위치는 Amap에서 '浦东国际机场' 검색"]
+].map((p,i)=>({id:i+1,name:p[0],cn:p[1],type:p[2],area:p[3],desc:p[4],rec:!!p[5],tip:p[6]||"",book:!!p[7]}));
+
+/* 웨이팅·예약 특수 지역: g=early(아침 일찍) / long(웨이팅 김) / book(예약 권장) */
+const WAIT={
+"지아지아 탕바오":{g:"early",note:"일찍 품절되는 경우가 있어요.",when:"🌅 오픈 직후, 아침에 먼저 가기"},
+"헌지우이치엔":{g:"long",note:"웨이팅이 최대 3시간까지 갈 수 있어요(일요일은 적은 편). 웨이팅 적은 지점을 고르는 것도 방법이에요.",when:"📲 도착 전에 원격 줄서기로 번호표 받아두기"},
+"하이디라오":{g:"long",note:"인기 매장은 2시간 넘게 기다리는 경우가 많다고 해요. 난징동루·와이탄·푸동 매장 예약 대행 상품도 있어요.",when:"📲 식사 시간 전에 원격 대기·예약"},
+"예상하이":{g:"book",note:"북경오리 · 예약하는 게 좋아요.",when:"📅 여행 전에 미리 예약"},
+"성용싱":{g:"book",note:"털게 전문점 · 예약하는 게 좋아요.",when:"📅 여행 전에 미리 예약"},
+"예원":{g:"book",note:"예약하는 게 좋은 곳이에요.",when:"📅 방문일 전에 예약·예매 확인, 낮에 방문"},
+"동방명주":{g:"book",note:"예약하는 게 좋은 곳이에요.",when:"📅 방문일 전에 예약·예매 확인"},
+"상하이 타워 전망대":{g:"book",note:"예약하는 게 좋은 곳이에요.",when:"📅 방문일 전에 예약·예매 확인"}
+};
+const dp=p=>"https://www.dianping.com/search/keyword/1/0_"+encodeURIComponent(p.cn);
+function copyCn(id,btn){const p=places.find(x=>x.id===id);const done=()=>{btn.textContent="복사됨 ✓";setTimeout(()=>btn.textContent="중국어명 복사",1500)};
+ const fb=()=>{const t=document.createElement("textarea");t.value=p.cn;document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(e){}t.remove();done()};
+ try{navigator.clipboard.writeText(p.cn).then(done,fb)}catch(e){fb()}}
+/* 지역 중심 좌표(위도, 경도) — 대략값 */
+const AREAS={"인민광장·난징동루":[31.2340,121.4770],"신천지":[31.2195,121.4758],"와이탄":[31.2397,121.4905],"예원":[31.2272,121.4925],"안푸루":[31.2100,121.4450],"푸동":[31.2397,121.4998],"주자각":[31.1100,121.0500],"티엔즈팡":[31.2085,121.4690],"정안사":[31.2236,121.4457],"옥불사":[31.2421,121.4448],"훙커우":[31.2740,121.4830],"정안 조이시티":[31.2400,121.4680],"오각장":[31.3030,121.5130]};
+const LODGE={name:"basePLUS佰舍服务式公寓 (엑스포 박물관 강변점)",cn:"basePLUS佰舍服务式公寓(上海世博会博物馆滨江店)",coord:[31.1990,121.4930]};
+AREAS["숙소"]=LODGE.coord;AREAS["푸동공항"]=[31.1443,121.8083];
+
+const mem={};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},set(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}};
+function load(k){try{return JSON.parse(store.get(k)||"[]")}catch(e){return[]}}
+/* 여행 기간: 11/26(목) ~ 11/29(일) */
+const DAYS=[["1일 차","11/26(목)","2026-11-26"],["2일 차","11/27(금)","2026-11-27"],["3일 차","11/28(토)","2026-11-28"],["4일 차","11/29(일)","2026-11-29"]];
+const DATEMAP=Object.fromEntries(DAYS.map(d=>[d[2],d[0]]));
+const dl=d=>{const x=DAYS.find(v=>v[0]===d);return x?x[0]+" · "+x[1]:d};
+let schedules=load("sh_schedules"),favorites=load("sh_favorites"),done=load("sh_done"),filter="전체",currentPlace=null,mode="meal",meal="점심",anchorId="";
+const $=id=>document.getElementById(id);
+const SHEET_IDS=places.filter(p=>!p.rec&&p.type!=="숙소"&&p.type!=="교통").map(p=>p.id);
+if(!store.get("sh_fav_init")){favorites=[...new Set([...favorites,...SHEET_IDS])];store.set("sh_fav_init","1");store.set("sh_favorites",JSON.stringify(favorites))}
+let viewMode=store.get("sh_view")||"fav-first",nearId="",nearType="전체";
+const VIEWS=[["fav-first","⭐ 즐겨찾기 우선"],["fav-only","♥ 즐겨찾기만"],["dist","📍 거리순만"]];
+const isFav=p=>favorites.includes(p.id);
+const favTag=p=>isFav(p)?'<span class="rec fv">♥</span>':"";
+function viewChips(){return `<div class="filters" style="padding:4px 0">${VIEWS.map(v=>`<button type="button" class="filter ${v[0]===viewMode?"active":""}" onclick="setView('${v[0]}')">${v[1]}</button>`).join("")}</div>`}
+function setView(m){viewMode=m;store.set("sh_view",m);render();if($("nearModal").classList.contains("open")&&nearId)showNearby(nearId,nearType);if($("pickModal").classList.contains("open"))renderPick()}
+function orderItems(arr,pf,df){let l=arr.slice();if(viewMode==="fav-only")l=l.filter(x=>isFav(pf(x)));
+ const d=x=>{const v=df(x);return v==null?1e9:v};
+ if(viewMode==="dist")l.sort((a,b)=>d(a)-d(b)||pf(a).id-pf(b).id);
+ else l.sort((a,b)=>(isFav(pf(b))-isFav(pf(a)))||d(a)-d(b)||pf(a).id-pf(b).id);
+ return l}
+function save(){store.set("sh_schedules",JSON.stringify(schedules));store.set("sh_favorites",JSON.stringify(favorites));store.set("sh_done",JSON.stringify(done));render()}
+const AMAP_PKG="com.autonavi.minimap",enc=encodeURIComponent;
+function amapWeb(p){return "https://www.amap.com/search?query="+enc(p.cn)}
+function amap(p){return `intent://poi?sourceApplication=shanghai-guide&keywords=${enc(p.cn)}&dev=0#Intent;scheme=androidamap;package=${AMAP_PKG};S.browser_fallback_url=${enc(amapWeb(p))};end`}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+/* ---------- 거리 · 이동수단 ---------- */
+function coord(a){return AREAS[a]||null}
+function hav(a,b){const r=x=>x*Math.PI/180,dLa=r(b[0]-a[0]),dLo=r(b[1]-a[1]);const h=Math.sin(dLa/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(dLo/2)**2;return 2*6371*Math.asin(Math.sqrt(h))}
+function dist(a1,a2){const c1=coord(a1),c2=coord(a2);if(!c1||!c2)return null;if(a1===a2)return .4;return Math.max(.4,hav(c1,c2)*1.3)}
+function travel(a1,a2){
+ const d=dist(a1,a2);if(d===null)return null;
+ const walk=Math.max(3,Math.round(d*13.3)),metro=Math.round(10+d*2.2),taxi=Math.round(5+d/(d>20?55:22)*60);
+ if(d<=2)return{d,min:walk,mode:"walk",same:a1===a2,main:`🚶 도보 약 ${walk}분`,alt:d>1?`🚕 택시 약 ${taxi}분`:""};
+ if(d<=20)return{d,min:metro,mode:"metro",main:`🚇 지하철 약 ${metro}분`,alt:`🚕 택시/디디 약 ${taxi}분`};
+ return{d,min:taxi,mode:"taxi",main:`🚕 택시/디디 약 ${taxi}분`,alt:"🚇 지하철·버스 환승도 가능(더 오래 걸림)"}
+}
+function routeLink(a1,a2,n1,n2,m){
+ const c1=coord(a1),c2=coord(a2),mm={walk:"walk",metro:"bus",taxi:"car"}[m]||"car",t={walk:2,metro:1,taxi:0}[m]??0;
+ const web=`https://uri.amap.com/navigation?from=${c1[1]},${c1[0]},${enc(n1)}&to=${c2[1]},${c2[0]},${enc(n2)}&mode=${mm}&coordinate=wgs84&src=shanghai-guide&callnative=1`;
+ return `intent://route?sourceApplication=shanghai-guide&slat=${c1[0]}&slon=${c1[1]}&sname=${enc(n1)}&dlat=${c2[0]}&dlon=${c2[1]}&dname=${enc(n2)}&dev=1&t=${t}#Intent;scheme=androidamap;package=${AMAP_PKG};S.browser_fallback_url=${enc(web)};end`
+}
+function legHTML(a,b){
+ const t=travel(a.area,b.area);
+ if(!t)return `<div class="leg"><span class="legalt">📍 위치 미정 · 이동수단을 계산할 수 없어요</span></div>`;
+ return `<div class="leg"><span class="legmain">${t.main}</span>${t.alt?`<span class="legalt">${t.alt}</span>`:""}<span class="legd">${t.same?"같은 지역 · ":""}약 ${t.d.toFixed(1)}km</span><a class="btn small outline" target="_blank" rel="noopener" href="${routeLink(a.area,b.area,a.cn||a.title,b.cn||b.title,t.mode)}">경로 ↗</a></div>`
+}
+function rank(s){const m={"아침":0,"점심":1,"오후":2,"저녁":3};if(s.slot in m)return m[s.slot];if(s.slot==="시간 지정"&&s.time){const[h,mi]=s.time.split(":").map(Number);return (h*60+mi-540)/180}return 5}
+function dayItems(d,extra){return [...schedules.filter(s=>s.day===d),...(extra?[extra]:[])].map((s,i)=>({s,i})).sort((a,b)=>rank(a.s)-rank(b.s)||a.i-b.i).map(x=>x.s)}
+function nearby(s,limit=8){
+ const used=new Set(schedules.map(x=>x.title));
+ return places.filter(p=>!used.has(p.name)).map(p=>({p,t:travel(s.area,p.area)})).filter(x=>x.t).sort((a,b)=>a.t.d-b.t.d||a.p.id-b.p.id).slice(0,limit)
+}
+
+const TYPEUI={"맛집":["🍜","#e2693f","#f3a35c"],"카페":["☕","#8a6a4f","#c9a27c"],"관광":["🏯","#236b78","#4fa3a5"],"쇼핑":["🛍️","#a0528a","#d98ab8"],"덕질":["🎮","#5a54c9","#9a8cf0"],"숙소":["🏨","#3d5a80","#7a9cc6"],"교통":["✈️","#4a6fa5","#8fb3e0"]};
+const grad=t=>{const u=TYPEUI[t]||["📍","#71818a","#a9b6bb"];return `background:linear-gradient(135deg,${u[1]},${u[2]})`};
+const emo=t=>(TYPEUI[t]||["📍"])[0];
+const thumb=p=>`<div class="thumb" style="${grad(p.type)}">${emo(p.type)}</div>`;
+const photo=p=>"https://search.naver.com/search.naver?where=image&query="+encodeURIComponent("상하이 "+p.name);
+const findPlace=s=>places.find(x=>x.id===s.pid)||places.find(x=>x.name===s.title);
+const tags=p=>(WAIT[p.name]?`<span class="rec wt" onclick="whyOpen(event,${p.id})">웨이팅·예약 ⓘ</span>`:"")+(p.rec?'<span class="rec">추천</span>':"")+(p.book?`<span class="rec bk" onclick="whyOpen(event,${p.id})">예약 권장 ⓘ</span>`:"");
+const WHY={
+"상하이 타워 전망대":{why:"입장 시간대(타임슬롯)가 정해진 표라서 현장에서 사면 원하는 시간이 없거나 오래 기다릴 수 있어요. 특히 일몰·야경 시간대와 주말에 인기가 높아요.",time:"관람 약 1~1.5시간 + 입장·엘리베이터 대기 · 성수기·주말 저녁은 대기가 길 수 있어요(후기 기준)",how:"여행 전에 공식 위챗 미니프로그램이나 Trip.com(携程) 등으로 날짜·시간 지정 예매. 날씨 흐린 날은 전망이 안 보이니 맑은 날로 고르기"},
+"동방명주":{why:"전망대·유리 바닥 등 구간별 입장권이 있고, 인기 시간대엔 입장 줄이 길어요. 야경 시간대는 특히 붐벼요.",time:"관람 약 1~1.5시간 · 인기 시간대 입장 대기 있음(후기 기준)",how:"원하는 구간·시간대를 정해서 미리 온라인 예매(Trip.com·위챗 등). 현장 구매는 줄이 길 수 있어요"},
+"예원":{why:"관광객이 가장 몰리는 곳이라 주말·점심 이후엔 입장·주변 가게 모두 붐벼요. 일부 구역은 입장권 확인이 필요해요.",time:"둘러보기 약 1.5~2시간 · 낮 시간대(오전)가 비교적 한산해요",how:"방문일 전에 입장권·예약 필요 여부 확인하고, 가능하면 오전에 방문"},
+"예상하이":{why:"북경오리가 대표 메뉴인 인기 식당이라 식사 시간대엔 자리가 빨리 차요.",time:"식사 약 1.5시간 · 예약 없으면 자리가 없을 수 있어요",how:"여행 전에 Dianping 또는 전화·위챗으로 예약. 인원·시간을 미리 정하기"},
+"성용싱":{why:"털게(大闸蟹) 전문점으로 계절·시간대에 따라 대기가 길고 자리가 빨리 차요.",time:"식사 약 1.5시간 · 무예약 시 대기가 길 수 있어요",how:"여행 전에 예약. 털게는 계절 메뉴라 시즌에 맞는지도 확인"},
+"헌지우이치엔":{why:"양꼬치 대표 맛집이라 웨이팅이 아주 길어요.",time:"최대 3시간까지 대기(일요일은 적은 편)",how:"Dianping 원격 줄서기(在线排队)로 번호표를 받아 두고 다른 일정 하다가 가기"},
+"하이디라오":{why:"인기 매장은 식사 시간대 대기가 길어요.",time:"2시간 이상 대기하는 경우가 많다고 해요",how:"식사 시간 전에 원격 대기·예약. 대기 중 무료 간식·네일 서비스를 하는 매장도 있어요"},
+"지아지아 탕바오":{why:"일찍 품절될 수 있는 가게라 늦게 가면 못 먹을 수 있어요.",time:"오픈 직후 가면 대기가 짧아요",how:"오전 일찍 가서 먼저 먹고 다른 일정 시작하기"},
+"푸동 신구":{why:"이 항목은 지역이라 예약할 곳이 없어요. 그 안의 동방명주와 상하이 타워 전망대가 예약 권장이에요.",time:"두 곳 모두 입장 대기가 길 수 있어요(후기 기준)",how:"동방명주·상하이 타워 카드를 열어 자세한 이유와 방법을 확인하세요"}
+};
+function whyOpen(ev,id){if(ev){ev.stopPropagation();ev.preventDefault()}const p=places.find(x=>x.id===id);if(!p)return;const w=WHY[p.name]||{why:"시트에서 예약을 권장한 곳이에요.",time:"자세한 대기 시간 정보는 아직 없어요.",how:"방문 전 Dianping·위챗으로 예약 가능한지 확인하세요"};$("whyTitle").textContent=p.name;$("whyBody").innerHTML=`<div class="whybox wy1"><b>❓ 왜 예약해야 해요?</b>${esc(w.why)}</div><div class="whybox wy2"><b>⏱ 얼마나 걸려요?</b>${esc(w.time)}</div><div class="whybox wy3"><b>📲 어떻게 해요?</b>${esc(w.how)}</div><div class="hint" style="margin-top:10px">시트와 웹 후기·일반 정보 기준이라 실제 대기 시간과 예약 방식은 현장·날짜에 따라 달라질 수 있어요.</div>`;layerOpen($("whyModal"))}
+$("closeWhy").onclick=()=>layerClose($("whyModal"));
+const tipl=p=>p.tip?`<div class="tip">📍 ${esc(p.tip)}</div>`:"";
+function schedHead(s){const pl=findPlace(s);return `<div class="row" style="justify-content:flex-start;align-items:flex-start;margin-top:8px">${pl?thumb(pl):""}<div class="placeinfo"><div class="place" style="margin-top:0">${esc(s.title)}${s.auto?'<span class="rec">AI 계획</span>':""}${pl?tags(pl):""}</div><div class="muted">${esc(s.area||"지역 미정")}${s.time?" · "+esc(s.time):""}${pl?" · "+esc(pl.type):""}</div>${pl?`<div class="muted" style="margin-top:3px">${esc(pl.desc)}</div>${tipl(pl)}`:""}</div></div>`}
+/* ---------- 렌더 ---------- */
+function render(){
+$("statSchedules").textContent=schedules.length;$("statDone").textContent=done.length;$("statFav").textContent=favorites.length;
+const days=[...DAYS.map(d=>d[0]),...[...new Set(schedules.map(s=>s.day))].filter(d=>!DAYS.some(v=>v[0]===d))];
+$("scheduleList").innerHTML=days.map(d=>{const its=dayItems(d);return `<div class="dayhead row"><span>${esc(dl(d))}</span><button class="small outline" onclick="openCustom('${esc(d)}')">＋ 추가</button></div>`+(its.length?its.map((s,i,arr)=>(i>0?legHTML(arr[i-1],s):"")+`<article class="card ${done.includes(s.id)?"done":""}"><div class="topline"><span class="tag">${esc(s.slot)}</span><label style="margin:0;font-weight:600"><input type="checkbox" style="width:auto;vertical-align:middle" ${done.includes(s.id)?"checked":""} onchange="toggleDone('${s.id}')"> 방문 완료</label></div>${schedHead(s)}${s.memo?`<p class="muted">${esc(s.memo)}</p>`:""}<div class="actions"><button class="small" onclick="showNearby('${s.id}')">📍 근처 가까운 순</button><a class="btn small secondary" target="_blank" rel="noopener" href="${amap({cn:s.cn||s.title})}">Amap에서 검색 ↗</a><button class="small outline" onclick="removeSchedule('${s.id}')">삭제</button></div></article>`).join(""):'<div class="card muted">이 날은 아직 일정이 없어요. 장소 둘러보기에서 추가해 보세요.</div>')}).join("");
+
+/* 기준 일정 선택 */
+const anchorable=schedules.filter(s=>coord(s.area));
+if(anchorId&&!anchorable.some(s=>s.id===anchorId))anchorId="";
+$("anchorSel").innerHTML='<option value="">정렬 안 함 (기본 순서)</option>'+anchorable.map(s=>`<option value="${esc(s.id)}">${esc(s.day)} · ${esc(s.title)}</option>`).join("");
+$("anchorSel").value=anchorId;
+const anchor=schedules.find(s=>s.id===anchorId);
+const q=$("q").value.trim().toLowerCase();
+let list=places.filter(p=>(filter==="전체"||p.type===filter)&&(!q||[p.name,p.cn,p.type,p.area,p.desc,p.tip].join(" ").toLowerCase().includes(q))).map(p=>({p,t:anchor?travel(anchor.area,p.area):null}));
+$("modeChips").innerHTML=viewChips()+(viewMode==="dist"&&!anchor?'<div class="hint" style="margin-bottom:6px">아래에서 기준 일정을 고르면 거리순으로 정렬돼요.</div>':"");
+list=orderItems(list,x=>x.p,x=>x.t?x.t.d:null);
+$("placeList").innerHTML=!list.length?'<div class="card muted">보여드릴 장소가 없어요. 보기 방식이나 검색어를 바꿔 보세요.</div>':list.map(({p,t})=>`<article class="card"><div class="row">${thumb(p)}<div class="placeinfo"><div class="place" style="margin-top:0">${esc(p.name)}${tags(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.area)}${p.cn?" · "+esc(p.cn):""}</div></div><button class="heart" onclick="toggleFav(${p.id})">${favorites.includes(p.id)?"♥":"♡"}</button></div><p class="muted">${esc(p.desc)}</p>${tipl(p)}${anchor?`<span class="badge">${t?`📍 ${esc(anchor.title)}에서 ${t.main} · ${t.d.toFixed(1)}km`:"📍 위치 미정"}</span>`:""}<div class="actions"><button class="small" onclick="openAdd(${p.id})">＋ 일정에 추가</button><a class="btn small secondary" target="_blank" rel="noopener" href="${amap(p)}">Amap 검색 ↗</a><a class="btn small outline" target="_blank" rel="noopener" href="${photo(p)}">사진 ↗</a>${WAIT[p.name]?`<a class="btn small secondary" target="_blank" rel="noopener" href="${dp(p)}">대중점평 ↗</a>`:""}</div></article>`).join("");
+const GR=[["early","🌅 아침 일찍 가야 하는 곳"],["long","⏳ 웨이팅이 긴 곳"],["book","📅 예약 권장"]];
+$("waitList").innerHTML=GR.map(([g,t])=>{const l=places.filter(p=>WAIT[p.name]&&WAIT[p.name].g===g);return l.length?`<h3 class="sech">${t}</h3>`+l.map(p=>{const w=WAIT[p.name];return `<article class="card"><div class="place">${esc(p.name)}${tags(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.area)} · ${esc(p.cn)}</div><div class="wnote">${esc(w.note)}</div><div class="tip">${esc(w.when)}</div>${tipl(p)}<div class="actions"><button class="small" onclick="openAdd(${p.id})">＋ 일정에 추가</button><a class="btn small secondary" target="_blank" rel="noopener" href="${dp(p)}">대중점평 ↗</a><button class="small secondary" onclick="copyCn(${p.id},this)">중국어명 복사</button><a class="btn small outline" target="_blank" rel="noopener" href="${amap(p)}">Amap ↗</a></div></article>`}).join(""):""}).join("");
+$("favoriteList").innerHTML=favorites.length?places.filter(p=>favorites.includes(p.id)).map(p=>`<article class="card"><div class="place">${esc(p.name)}${tags(p)}</div><div class="muted">${esc(p.area)} · ${esc(p.desc)}</div>${tipl(p)}<div class="actions"><button class="small" onclick="openAdd(${p.id})">일정에 추가</button><button class="small secondary" onclick="toggleFav(${p.id})">즐겨찾기 해제</button></div></article>`).join(""):'<div class="card muted">즐겨찾기한 장소가 없습니다.</div>';
+}
+function toggleDone(id){done=done.includes(id)?done.filter(x=>x!==id):[...done,id];save()}
+function removeSchedule(id){schedules=schedules.filter(s=>s.id!==id);done=done.filter(x=>x!==id);save()}
+function toggleFav(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];save()}
+
+/* ---------- 일정 추가 모달 ---------- */
+function openAdd(id,day){
+ currentPlace=places.find(p=>p.id===id);$("modalTitle").textContent="일정에 추가하기";renderPreview();
+ $("areaField").classList.add("hidden");
+ if(day){["mealDay","newDay"].forEach(k=>{if([...$(k).options].some(o=>o.value===day))$(k).value=day})}
+ setMode("meal");openModal();closeNear()
+}
+function renderPreview(){const p=currentPlace;
+ $("modalPlace").innerHTML=p?`<div class="pv"><div class="banner" style="${grad(p.type)}"><span>${emo(p.type)}</span><b>📍 ${esc(p.area)}</b></div><div class="pvb"><div class="place" style="margin-top:0">${esc(p.name)}${tags(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.cn)}</div><p class="muted" style="margin:8px 0 0">${esc(p.desc)}</p>${tipl(p)}${WAIT[p.name]?`<div class="wnote">${esc(WAIT[p.name].note)}</div>`:""}<div class="actions"><button type="button" class="small" onclick="openPick()">🔄 다른 장소 고르기</button><a class="btn small secondary" target="_blank" rel="noopener" href="${photo(p)}">사진 보기 ↗</a><a class="btn small outline" target="_blank" rel="noopener" href="${amap(p)}">Amap ↗</a></div></div></div>`
+ :`<div class="pv"><div class="banner" style="background:linear-gradient(135deg,#9fb2b8,#c9d6d9)"><span>📍</span><b>장소 미선택</b></div><div class="pvb"><p class="muted" style="margin:0">등록된 장소에서 고르면 사진·특이사항·위치 팁이 같이 보여요. 아래에서 직접 입력해도 돼요.</p><div class="actions"><button type="button" class="small" onclick="openPick()">🔍 장소 고르기</button></div></div></div>`}
+let pickFilter="전체";
+function renderPick(){const q=$("pickQ").value.trim().toLowerCase();
+ $("pickFilters").innerHTML=["전체","맛집","카페","관광","쇼핑","덕질","숙소","교통"].map(c=>`<button type="button" class="filter ${c===pickFilter?"active":""}" onclick="pickFilter='${c}';renderPick()">${c}</button>`).join("");
+ const dr=draft(),its=dayItems(dr.day).filter(x=>coord(x.area)),anc=its[its.length-1];
+ $("pickModes").innerHTML=viewChips()+`<div class="hint">${anc?"📍 이 날 마지막 일정 ‘"+esc(anc.title)+"’ 기준 거리예요.":"이 날 일정에 위치가 있으면 거리도 같이 보여드려요."}</div>`;
+ const l=orderItems(places.filter(p=>(pickFilter==="전체"||p.type===pickFilter)&&(!q||[p.name,p.cn,p.type,p.area,p.desc,p.tip].join(" ").toLowerCase().includes(q))).map(p=>({p,t:anc?travel(anc.area,p.area):null})),x=>x.p,x=>x.t?x.t.d:null);
+ $("pickList").innerHTML=l.length?l.map(({p,t})=>`<article class="card"><div class="pick">${thumb(p)}<div class="info"><div class="place" style="margin-top:0">${esc(p.name)}${tags(p)}${favTag(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.area)}${t?" · "+t.main+" "+t.d.toFixed(1)+"km":""}</div><div class="muted" style="margin-top:3px">${esc(p.desc)}</div>${tipl(p)}</div></div><div class="actions"><button type="button" class="small" onclick="choosePlace(${p.id})">이 장소 선택</button><a class="btn small outline" target="_blank" rel="noopener" href="${photo(p)}">사진 ↗</a></div></article>`).join(""):'<div class="card muted">검색 결과가 없어요.</div>'}
+function openPick(){layerOpen($("pickModal"));renderPick()}
+function closePick(){layerClose($("pickModal"))}
+function choosePlace(id){currentPlace=places.find(p=>p.id===id);$("areaField").classList.add("hidden");$("modalTitle").textContent="일정에 추가하기";renderPreview();closePick();updateHint()}
+$("closePick").onclick=closePick;$("pickModal").onclick=e=>{if(e.target===$("pickModal"))closePick()};$("pickQ").oninput=renderPick;
+/* 안드로이드 뒤로가기 버튼: 열린 창부터 닫기 */
+let layers=[],pushed=false;
+function layerOpen(el){el.classList.add("open");if(!layers.includes(el))layers.push(el);if(!pushed){try{history.pushState({l:1},"");pushed=true}catch(e){}}}
+function layerClose(el){el.classList.remove("open");layers=layers.filter(x=>x!==el);if(!layers.length&&pushed){pushed=false;try{history.back()}catch(e){}}}
+window.addEventListener("popstate",()=>{if(!pushed)return;pushed=false;const top=layers.pop();if(top)top.classList.remove("open");if(layers.length){try{history.pushState({l:1},"");pushed=true}catch(e){}}});
+function openModal(){layerOpen($("modal"));updateHint()}
+function closeModal(){layerClose($("modal"))}
+function setMode(m){mode=m;document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("selected",b.dataset.mode===m));$("mealFields").classList.toggle("hidden",m!=="meal");$("newFields").classList.toggle("hidden",m!=="new");$("timeFields").classList.toggle("hidden",m!=="time");updateHint()}
+function draft(){
+ const area=currentPlace?currentPlace.area:$("newArea").value;let day,slot,time="";
+ if(mode==="meal"){day=$("mealDay").value;slot=meal}
+ else if(mode==="new"){day=$("newDay").value;slot="새 일정"+(($("newTitle").value.trim()||(currentPlace?"":"새로운 일정"))?" · "+($("newTitle").value.trim()||"새로운 일정"):"")}
+ else{const d=$("customDate").value;day=DATEMAP[d]||(d?d+" 일정":"날짜 미정");slot="시간 지정";time=$("customTime").value}
+ return{id:"tmp",day,slot,time,area,title:currentPlace?.name||$("newTitle").value.trim()||"새 일정",cn:currentPlace?.cn||""}
+}
+function updateHint(){
+ const box=$("legHint"),t=draft(),items=dayItems(t.day,t),i=items.indexOf(t),prev=items[i-1],next=items[i+1],lines=[];
+ const line=(a,b,label)=>{const tr=travel(a.area,b.area);return tr?`${label} ${tr.main}${tr.alt?" / "+tr.alt:""} · ${tr.d.toFixed(1)}km`:`${label} 위치 미정이라 계산 불가`};
+ if(prev)lines.push(line(prev,t,`⬅ ${esc(prev.title)} →`));
+ if(next)lines.push(line(t,next,`➡ → ${esc(next.title)}`));
+ if(lines.length){box.innerHTML="<b>이 날 이동 미리보기</b><br>"+lines.join("<br>");box.classList.remove("hidden")}else box.classList.add("hidden")
+}
+document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+document.querySelectorAll("[data-meal]").forEach(b=>b.onclick=()=>{meal=b.dataset.meal;document.querySelectorAll("[data-meal]").forEach(x=>x.classList.toggle("selected",x===b))});
+$("scheduleForm").addEventListener("input",updateHint);$("scheduleForm").addEventListener("click",()=>setTimeout(updateHint,0));
+["mealDay","newDay"].forEach(k=>$(k).innerHTML=DAYS.map(d=>`<option value="${d[0]}">${d[0]} · ${d[1]}</option>`).join(""));
+$("customDate").min=DAYS[0][2];$("customDate").max=DAYS[3][2];$("customDate").value=DAYS[0][2];
+$("newArea").innerHTML=Object.keys(AREAS).map(a=>`<option>${a}</option>`).join("")+'<option value="미정">미정</option>';
+function doSubmit(){
+ const t=draft(),s={id:"s"+Date.now(),pid:currentPlace?.id,day:t.day,slot:t.slot,title:t.title,area:currentPlace?currentPlace.area:($("newArea").value||"미정"),cn:currentPlace?.cn||t.title,time:t.time,memo:$("memo").value.trim()};
+ schedules.push(s);$("memo").value="";$("newTitle").value="";document.querySelector('[data-tab="schedule"]').click();save();
+ if(coord(s.area))showNearby(s.id);closeModal()}
+$("scheduleForm").onsubmit=e=>{e.preventDefault();doSubmit()};$("submitBtn").onclick=doSubmit;
+function openCustom(day){currentPlace=null;$("modalTitle").textContent="새 일정 만들기";renderPreview();$("areaField").classList.remove("hidden");if(day)["mealDay","newDay"].forEach(k=>{if([...$(k).options].some(o=>o.value===day))$(k).value=day});setMode("new");openModal()}
+$("addCustom").onclick=()=>openCustom();
+$("closeModal").onclick=closeModal;$("modal").onclick=e=>{if(e.target===$("modal"))closeModal()};
+
+/* ---------- 근처 가까운 순 ---------- */
+function showNearby(id,type="전체"){
+ const s=schedules.find(x=>x.id===id);if(!s)return;nearId=id;nearType=type;
+ const all=nearby(s,999),types=["관광","맛집","카페","쇼핑","덕질"];
+ const card=({p,t})=>`<article class="card"><div class="place">${esc(p.name)}${tags(p)}${favTag(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.area)} · ${esc(p.desc)}</div>${tipl(p)}<span class="badge">${t.same?"같은 지역 · ":""}${t.main} · ${t.d.toFixed(1)}km</span>${t.alt?`<div class="muted" style="margin-top:4px">${t.alt}</div>`:""}<div class="actions"><button class="small" onclick="openAdd(${p.id},'${esc(s.day)}')">＋ 같은 날에 추가</button></div></article>`;
+ let h=viewChips()+'<div class="filters">'+["전체",...types].map(c=>`<button class="filter ${c===type?"active":""}" onclick="showNearby('${s.id}','${c}')">${c}</button>`).join("")+"</div>";
+ if(type==="전체")h+=types.map(tp=>{const l=orderItems(all.filter(x=>x.p.type===tp),x=>x.p,x=>x.t.d).slice(0,3);return l.length?`<h3 class="sech">${tp}</h3>`+l.map(card).join(""):""}).join("");
+ else{const l=orderItems(all.filter(x=>x.p.type===type),x=>x.p,x=>x.t.d).slice(0,10);h+=l.length?l.map(card).join(""):'<div class="card muted">이 종류의 근처 장소가 없어요.</div>'}
+ const none=viewMode==="fav-only"?'<div class="card muted">즐겨찾기한 근처 장소가 없어요. 위에서 보기 방식을 바꿔 보세요.</div>':'<div class="card muted">근처 장소가 없어요.</div>';
+ if(!h.includes("<article"))h+=none;
+ $("nearTitle").textContent="📍 ‘"+s.title+"’ 근처";
+ $("nearSub").textContent=s.day+" · 일정에 없는 장소 · 위에서 즐겨찾기 우선/거리순을 고를 수 있어요.";
+ $("nearList").innerHTML=h;layerOpen($("nearModal"))
+}
+function closeNear(){layerClose($("nearModal"))}
+$("closeNear").onclick=closeNear;$("nearModal").onclick=e=>{if(e.target===$("nearModal"))closeNear()};
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));["schedule","places","favorites","wait","plan"].forEach(id=>$(id).classList.toggle("hidden",id!==b.dataset.tab))});
+$("filters").innerHTML=["전체","맛집","카페","관광","쇼핑","덕질","숙소","교통"].map(c=>`<button class="filter ${c==="전체"?"active":""}" data-filter="${c}">${c}</button>`).join("");
+document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));render()});
+$("q").oninput=render;
+$("anchorSel").onchange=e=>{anchorId=e.target.value;render()};
+
+/* ===== 🤖 AI 계획 (규칙 기반 자동 추천) ===== */
+const GENRE={"헌지우이치엔":"양꼬치","예상하이":"북경오리","상하이탄":"북경오리","점도덕":"딤섬","션다청":"딤섬","페이다추":"가정식","그랜드마더":"가정식","홈즈":"가정식","라이라이샤오롱":"샤오롱바오","남상만두":"샤오롱바오","지아지아 탕바오":"샤오롱바오","뤄춘궈":"성젠바오","소양생전":"성젠바오","하이디라오":"훠궈","천지슌허":"훠궈","레드립스":"마라","성용싱":"게요리","이백해":"게요리","런허관":"게요리","릴리안베이커리":"디저트","양쯔간루":"디저트","산동잡량전병":"간식","알리멘타이":"브런치","헤이티":"음료"};
+const GENRES=["양꼬치","훠궈","샤오롱바오","성젠바오","딤섬","북경오리","게요리","가정식","마라","디저트"];
+const SNACK=new Set(["산동잡량전병","션다청","릴리안베이커리","양쯔간루","헤이티"]),BFAST=new Set(["알리멘타이","산동잡량전병","지아지아 탕바오","션다청"]);
+const NIGHT=new Set(["와이탄","황푸강 유람선","동방명주","상하이 타워 전망대"]),DAYONLY=new Set(["예원","예원상청","상하이 박물관","정안사","옥불사","홍커우 공원(루쉰공원)"]);
+const DUR={"예원":90,"예원상청":60,"상하이 박물관":120,"티엔즈팡":90,"신천지":60,"대한민국 임시정부 청사":50,"안푸루·우캉루":90,"화이하이중루":60,"정안사":40,"난징동루":60,"와이탄":50,"황푸강 유람선":60,"푸동 신구":90,"동방명주":60,"상하이 타워 전망대":60,"백련ZX 창취장":120,"제일백화점 4층":45,"팝마트 난징동루점":40,"디메이플라자":50,"주자각":180,"홍커우 공원(루쉰공원)":60,"옥불사":50,"정안 조이시티":90,"백련ZX 조취장":120};
+const ZONES={center:["인민광장·난징동루","와이탄","예원"],french:["신천지","티엔즈팡","안푸루","정안사"],pudong:["푸동"],far:["훙커우","옥불사","정안 조이시티","오각장"]};
+const ZNAME={center:"인민광장 · 난징동루 · 와이탄 · 예원",french:"프랑스 조계지 (신천지 · 티엔즈팡 · 안푸루)",pudong:"푸동 (동방명주 · 상하이 타워)"};
+const hm=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(Math.round(m%60)).padStart(2,"0");
+const toMin=t=>{const[h,m]=(t||"0:0").split(":").map(Number);return h*60+m};
+const pdur=p=>DUR[p.name]||({"관광":90,"쇼핑":75,"덕질":90,"맛집":75,"카페":45}[p.type]||60);
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const AIRPORTS={"푸동국제공항(PVG)":[31.1443,121.8083],"홍차오공항(SHA)":[31.1979,121.3363]};
+["lgIn","lgOut"].forEach(id=>$(id).innerHTML=Object.keys(AIRPORTS).map(a=>`<option>${a}</option>`).join(""));
+let planCfg=null,planRes=null;
+
+function makePlan(c){
+ const R=rng(c.seed||1),jit=()=>(c.seed>1?R()*12:0);
+ const taken=new Set(schedules.filter(s=>!s.auto).map(s=>s.title));
+ const used=new Set(),usedGenre=new Set();
+ const base=places.filter(p=>coord(p.area)&&!taken.has(p.name));
+ const want=p=>p.type==="덕질"?c.opts.includes("덕질"):p.type==="쇼핑"?c.opts.includes("쇼핑"):p.type==="카페"?c.opts.includes("카페"):true;
+ const zc=z=>{const a=ZONES[z].map(x=>AREAS[x]);return[a.reduce((t,v)=>t+v[0],0)/a.length,a.reduce((t,v)=>t+v[1],0)/a.length]};
+ let left=["center","french","pudong"],from=AREAS["숙소"],order=[];
+ while(left.length){left.sort((a,b)=>hav(from,zc(a))-hav(from,zc(b)));const z=left.shift();order.push(z);from=zc(z)}
+ const arr=toMin(c.arrive),dep=toMin(c.depart),days=[];
+ const xf=a=>Math.round(15+hav(AIRPORTS[a]||AIRPORTS["푸동국제공항(PVG)"],AREAS["숙소"])*1.3/50*60),xin=xf(c.inAir),xout=xf(c.outAir);
+ const lodge={area:"숙소",title:c.name||"숙소",cn:c.name||"숙소"};
+
+ function planDay(i,zone,start,end){
+  const items=[];let cur=start,prev=lodge,waitUsed=false,acts=0;
+  const areas=new Set(i<3?ZONES[zone]:[...ZONES.center,...ZONES.french,...ZONES.pudong,...(c.opts.includes("외곽")?ZONES.far:[])]);
+  const zhuDay=c.opts.includes("주자각")&&i===2;
+  const mv=a=>{const t=travel(prev.area,a);return t?t.min:20};
+  const add=(p,startAt,dur,kind,extra)=>{items.push(Object.assign({p,kind,start:startAt,end:startAt+dur,prev,leg:travel(prev.area,p.area)},extra||{}));prev={area:p.area,title:p.name,cn:p.cn};cur=startAt+dur;used.add(p.id);const g=GENRE[p.name];if(g)usedGenre.add(g);if(WAIT[p.name]&&WAIT[p.name].g!=="early")waitUsed=true};
+  const gap=(a,b)=>{if(b-a>=40&&c.pace<3)items.push({free:true,start:a,end:b})};
+  const pickAct=pred=>{const cs=base.filter(p=>!used.has(p.id)&&areas.has(p.area)&&["관광","쇼핑","덕질"].includes(p.type)&&want(p)&&!NIGHT.has(p.name)&&pred(p));if(!cs.length)return null;
+   const sc=p=>mv(p.area)+jit()-(isFav(p)?3:0);cs.sort((a,b)=>sc(a)-sc(b));return cs[0]};
+  const pickMeal=kind=>{
+   const ok=p=>{const w=WAIT[p.name],g=GENRE[p.name];
+    if(kind==="breakfast")return BFAST.has(p.name)&&!(w&&w.g==="long");
+    if(kind==="snack")return SNACK.has(p.name)||p.type==="카페";
+    if(p.type!=="맛집"||SNACK.has(p.name)||(w&&w.g==="early"))return false;
+    if(kind==="lunch"){if(w&&w.g==="book")return false;if(w&&w.g==="long")return i===3&&p.name==="헌지우이치엔"&&c.opts.includes("웨이팅");return true}
+    if(kind==="dinner"){if(w&&w.g==="long")return c.opts.includes("웨이팅")&&!(i===3);return true}
+    return true};
+   const cs=base.filter(p=>!used.has(p.id)&&(p.type==="맛집"||p.type==="카페")&&want(p)&&ok(p));if(!cs.length)return null;
+   const sc=p=>{const w=WAIT[p.name],g=GENRE[p.name];let v=mv(p.area)+jit();
+    if(g&&usedGenre.has(g))v+=45;if(g&&c.genres.includes(g))v-=30;
+    if(kind==="dinner"&&w&&w.g==="book")v-=25;if(kind==="dinner"&&w&&w.g==="long")v-=10;
+    if(w&&w.g!=="early"&&waitUsed)v+=60;
+    if(kind==="lunch"&&i===3&&p.name==="헌지우이치엔")v-=80;
+    if(kind==="breakfast"&&w&&w.g==="early")v-=12;return v};
+   cs.sort((a,b)=>sc(a)-sc(b));return cs[0]};
+
+  if(zhuDay){const z=base.find(p=>p.name==="주자각"&&!used.has(p.id));if(z){cur=Math.min(start,540);add(z,cur+mv(z.area),180,"act",{zhu:true});acts++}}
+  if(i>0&&!zhuDay&&start<=600){const p=pickMeal("breakfast");if(p)add(p,cur+mv(p.area),45,"breakfast")}
+  const maxActs=Math.max(1,c.pace+1-(i===0?1:0))-(zhuDay?1:0);
+  while(acts<maxActs&&cur<690){const p=pickAct(x=>DAYONLY.has(x.name))||pickAct(()=>true);if(!p)break;const a=cur+mv(p.area);if(a+pdur(p)>end)break;add(p,a,pdur(p),"act");acts++}
+  if(!zhuDay&&cur<=870&&end-cur>=90){const p=pickMeal("lunch");if(p){const a=cur+mv(p.area),st=Math.max(a,720);if(st+75<=end){gap(a,st);add(p,st,75,"lunch")}}}
+  while(acts<maxActs&&cur<1000&&(i<3||cur<end-60)){const p=pickAct(x=>cur>=960?!DAYONLY.has(x.name):true);if(!p)break;const a=cur+mv(p.area);if(a+pdur(p)>end)break;add(p,a,pdur(p),"act");acts++}
+  if((c.pace===1||c.opts.includes("카페"))&&cur<1020&&end-cur>=150){const p=pickMeal("snack");if(p){const a=cur+mv(p.area);if(a+30<=1080)add(p,a,30,"snack")}}
+  {const p=pickMeal("dinner");if(p){const a=cur+mv(p.area),w=WAIT[p.name],st=Math.max(a,w&&w.g==="long"?1020:1080);if(st+90<=end+(i<3?60:0)){gap(a,st);add(p,st,90,"dinner")}}}
+  if(i<3){const n=base.filter(p=>!used.has(p.id)&&NIGHT.has(p.name)&&areas.has(p.area));n.sort((a,b)=>mv(a.area)-mv(b.area));
+   for(const p of n.slice(0,c.pace===3?2:1)){const a=cur+mv(p.area);if(a+pdur(p)<=end+30)add(p,a,pdur(p),"night")}}
+  const move=items.reduce((t,x)=>t+(x.leg?x.leg.min:0),0);
+  return{i,zone,items,move}
+ }
+ for(let i=0;i<4;i++){
+  const start=i===0?Math.max(540,arr+60+xin+30):(c.pace===1?600:570);
+  const end=i===3?dep-xout-150-30:(c.pace===3?1320:c.pace===2?1290:1230);
+  const d=planDay(i,i<3?order[i]:null,start,end);d.startT=start;d.endT=end;days.push(d)
+ }
+ const placed=new Set();days.forEach(d=>d.items.forEach(x=>x.p&&placed.add(x.p.id)));
+ const unplaced=places.filter(p=>coord(p.area)&&!placed.has(p.id)&&isFav(p)&&!taken.has(p.name));
+ const noLoc=places.filter(p=>!coord(p.area));
+ return{days,unplaced,noLoc,order,arr,dep,xin,xout}
+}
+
+const KIND={breakfast:"🥐 아침",lunch:"🍽 점심",dinner:"🍷 저녁",snack:"🍰 간식·휴식",act:"📍 활동",night:"🌃 야경"};
+function planNote(p,x,di){const n=[];const w=WAIT[p.name];
+ if(w)n.push(w.when+" — "+w.note);
+ if(p.name==="헌지우이치엔"&&di===3)n.push("4일 차는 일요일이라 웨이팅이 적은 편이에요(시트 기준).");
+ if(x.kind==="night")n.push("야경은 해가 진 뒤가 좋아요(11월은 일몰이 5시 전후).");
+ if(x.zhu)n.push("간식으로 식사를 대신하는 반나절 코스(시트 기준).");
+ return n}
+function renderPlan(){
+ const r=planRes,c=planCfg;if(!r)return;
+ let h=`<div class="card"><div class="actions" style="margin-top:0"><button id="planApply">✅ 이 계획을 여행 일정에 적용</button><button class="secondary" id="planAgain">🔀 다시 짜기</button></div><div class="hint" style="margin-top:8px">적용하면 이전에 적용한 AI 일정은 교체돼요. 내가 직접 넣은 일정은 그대로 남고, 그 장소는 계획에서 빼요.</div></div>`;
+ r.days.forEach(d=>{
+  const th=d.zone?ZNAME[d.zone]:"마무리 · 남은 곳";
+  h+=`<div class="pday"><b>${esc(dl(DAYS[d.i][0]))}</b> · ${esc(th)}<small>${hm(d.startT)} 시작 · 이동 합계 약 ${d.move}분 · ${d.items.filter(x=>x.p).length}곳</small></div>`;
+  if(d.i===0)h+=`<div class="free">🛬 ${esc(c.inAir)} ${esc(c.arrive)} 착륙 → 입국·수하물 약 1시간 → 숙소까지 택시 약 ${r.xin}분 → 체크인·휴식 후 ${hm(d.startT)} 출발</div>`;
+  if(!d.items.some(x=>x.p))h+=`<div class="card muted">이 날은 시간이 부족해서 추천할 곳이 없어요.</div>`;
+  d.items.forEach((x,ii)=>{
+   if(x.free){h+=`<div class="free">🕒 ${hm(x.start)}–${hm(x.end)} 자유시간 (근처 구경·휴식)</div>`;return}
+   const p=x.p;
+   h+=legHTML(x.prev,{area:p.area,title:p.name,cn:p.cn});
+   h+=`<article class="card"><div class="topline"><span class="tag">${hm(x.start)}–${hm(x.end)}</span><span class="muted">${KIND[x.kind]||""}${GENRE[p.name]?" · "+GENRE[p.name]:""}</span></div><div class="row" style="justify-content:flex-start;align-items:flex-start;margin-top:8px">${thumb(p)}<div class="placeinfo"><div class="place" style="margin-top:0">${esc(p.name)}${tags(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.area)}</div><div class="muted" style="margin-top:3px">${esc(p.desc)}</div>${tipl(p)}${planNote(p,x,d.i).map(t=>`<div class="wnote">${esc(t)}</div>`).join("")}</div></div><div class="actions"><button class="small" onclick="addPlanItem(${d.i},${ii})">＋ 일정에 담기</button><a class="btn small secondary" target="_blank" rel="noopener" href="${amap(p)}">Amap ↗</a>${WAIT[p.name]?`<a class="btn small secondary" target="_blank" rel="noopener" href="${dp(p)}">대중점평 ↗</a>`:""}</div></article>`});
+  if(d.i===3)h+=`<div class="free">🧳 ${hm(d.endT+30)} 숙소 출발 → ${esc(c.outAir)}까지 택시 약 ${r.xout}분 → 출국 수속 2시간 반 여유 → ${esc(c.depart)} 비행기 출발 (마지막 일정은 ${hm(d.endT)}까지)</div>`;
+ });
+ if(r.unplaced.length)h+=`<div class="card"><b>이번 계획에 못 넣은 즐겨찾기</b><div class="muted" style="margin-top:6px">${r.unplaced.map(p=>esc(p.name)).join(" · ")}<br>강도를 올리거나 ‘다시 짜기’를 눌러 보세요.</div></div>`;
+ if(r.noLoc.length)h+=`<div class="card"><b>위치가 미정이라 계획에서 뺀 곳</b><div class="muted" style="margin-top:6px">${r.noLoc.map(p=>esc(p.name)+(WAIT[p.name]?"(예약 권장)":"")).join(" · ")}<br>위치를 알면 ‘장소’ 데이터의 지역만 바꾸면 반영돼요.</div></div>`;
+ $("planOut").innerHTML=h;
+ $("planApply").onclick=applyPlan;$("planAgain").onclick=()=>{planCfg.seed=(planCfg.seed||1)+1;store.set("sh_plan_cfg",JSON.stringify(planCfg));planRes=makePlan(planCfg);renderPlan()}
+}
+function toSched(p,x,di){return{id:"a"+Date.now()+"_"+p.id,auto:true,pid:p.id,day:DAYS[di][0],slot:"시간 지정",time:hm(x.start),title:p.name,area:p.area,cn:p.cn,memo:[KIND[x.kind]||"",...planNote(p,x,di)].filter(Boolean).join(" · ")}}
+function addPlanItem(di,ii){const x=planRes.days[di].items[ii];if(!x||!x.p)return;schedules.push(toSched(x.p,x,di));save()}
+function applyPlan(){schedules=schedules.filter(s=>!s.auto);planRes.days.forEach(d=>d.items.forEach(x=>{if(x.p)schedules.push(toSched(x.p,x,d.i))}));save();document.querySelector('[data-tab="schedule"]').click()}
+
+/* 폼 */
+const PACES=[[1,"🐢 여유"],[2,"🚶 보통"],[3,"🏃 빡빡"]];
+const OPTS=[["쇼핑","🛍 쇼핑"],["덕질","🎮 덕질"],["카페","☕ 카페·디저트"],["주자각","🏘 주자각 반나절"],["외곽","🛣 외곽(홍커우·옥불사·조이시티)"],["웨이팅","⏳ 웨이팅 긴 곳 포함"]];
+const LAREAS=["인민광장·난징동루","와이탄","예원","신천지","티엔즈팡","안푸루","정안사","푸동","정안 조이시티","옥불사","훙커우","오각장"];
+let cfgForm={pace:2,opts:["쇼핑","덕질","카페","웨이팅"],genres:[]};
+function drawChips(){
+ $("paceChips").innerHTML=PACES.map(v=>`<button type="button" class="choice ${cfgForm.pace===v[0]?"selected":""}" onclick="cfgForm.pace=${v[0]};drawChips()">${v[1]}</button>`).join("");
+ $("optChips").innerHTML=OPTS.map(v=>`<button type="button" class="choice ${cfgForm.opts.includes(v[0])?"selected":""}" onclick="tgl('opts','${v[0]}')">${v[1]}</button>`).join("");
+ $("genreChips").innerHTML=GENRES.map(g=>`<button type="button" class="choice ${cfgForm.genres.includes(g)?"selected":""}" onclick="tgl('genres','${g}')">${g}</button>`).join("")}
+function tgl(k,v){const a=cfgForm[k];cfgForm[k]=a.includes(v)?a.filter(x=>x!==v):[...a,v];drawChips()}
+$("lgArea").innerHTML='<option value="">지역 선택</option>'+LAREAS.map(a=>`<option>${a}</option>`).join("");
+$("lgName").oninput=()=>{const v=$("lgName").value.trim();const a=$("lgAmap");a.classList.toggle("hidden",!v);if(v)a.href=amap({cn:v})};
+function lodgeCoord(){const m=$("lgCoord").value.match(/-?\d+(\.\d+)?/g);if(m&&m.length>=2){const la=+m[0],lo=+m[1];if(la>30&&la<32.5&&lo>120&&lo<122.5)return[la,lo]}return null}
+$("planGo").onclick=()=>{
+ const area=$("lgArea").value,co=lodgeCoord(),msg=$("planMsg");
+ if(!area&&!co){msg.textContent="숙소가 있는 지역을 골라 주세요(좌표를 넣으면 지역은 비워도 돼요).";return}
+ if($("lgCoord").value.trim()&&!co){msg.textContent="좌표를 읽지 못했어요. ‘위도, 경도’ 순서로 상하이 근처 값인지 확인해 주세요. 지역만 골라도 돼요.";return}
+ msg.textContent="";
+ AREAS["숙소"]=co||AREAS[area];
+ planCfg={name:$("lgName").value.trim(),area,coord:$("lgCoord").value.trim(),inAir:$("lgIn").value,outAir:$("lgOut").value,arrive:$("lgArr").value||"14:00",depart:$("lgDep").value||"18:00",pace:cfgForm.pace,opts:cfgForm.opts,genres:cfgForm.genres,seed:1};
+ store.set("sh_plan_cfg",JSON.stringify(planCfg));
+ planRes=makePlan(planCfg);renderPlan();$("planOut").scrollIntoView({behavior:"smooth"})};
+try{const sv=JSON.parse(store.get("sh_plan_cfg")||"null");if(sv){$("lgName").value=sv.name||"";$("lgArea").value=sv.area||"";$("lgCoord").value=sv.coord||"";$("lgIn").value=sv.inAir||$("lgIn").options[0].value;$("lgOut").value=sv.outAir||$("lgOut").options[0].value;$("lgArr").value=sv.arrive||"14:00";$("lgDep").value=sv.depart||"18:00";cfgForm={pace:sv.pace||2,opts:sv.opts||[],genres:sv.genres||[]};const co=lodgeCoord();AREAS["숙소"]=co||AREAS[sv.area]||LODGE.coord;$("lgName").oninput()}}catch(e){}
+if(!store.get("sh_plan_cfg")){$("lgName").value=LODGE.name;$("lgCoord").value=LODGE.coord.join(", ");$("lgName").oninput()}
+drawChips();
+function copyText(t,btn,label){const done=()=>{if(btn){const o=btn.textContent;btn.textContent="복사됨 ✓";setTimeout(()=>btn.textContent=label||o,1500)}};
+ const fb=()=>{const x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();try{document.execCommand("copy")}catch(e){}x.remove();done()};
+ try{navigator.clipboard.writeText(t).then(done,fb)}catch(e){fb()}}
+function shareText(){const days=[...DAYS.map(d=>d[0]),...[...new Set(schedules.map(s=>s.day))].filter(d=>!DAYS.some(v=>v[0]===d))];
+ const out=["🇨🇳 상하이 여행 일정"];days.forEach(d=>{const l=dayItems(d);if(!l.length)return;out.push("","■ "+dl(d));l.forEach(s=>out.push("· "+s.slot+" "+s.title+(s.area&&s.area!=="미정"?" ("+s.area+")":"")+(s.time?" "+s.time:"")+(s.memo?" - "+s.memo:"")))});
+ return out.length>1?out.join("\n"):"아직 등록된 일정이 없어요."}
+$("shareBtn").onclick=async()=>{const t=shareText();if(navigator.share){try{await navigator.share({title:"상하이 여행 일정",text:t});return}catch(e){if(e&&e.name==="AbortError")return}}copyText(t,$("shareBtn"),"일정 텍스트 공유 (카톡 등)")};
+$("backupBtn").onclick=()=>copyText(JSON.stringify({v:1,schedules,favorites,done}),$("backupBtn"),"백업 복사");
+$("restoreBtn").onclick=()=>{try{const d=JSON.parse($("restoreBox").value.trim());if(!Array.isArray(d.schedules))throw 0;schedules=d.schedules;favorites=Array.isArray(d.favorites)?d.favorites:[];done=Array.isArray(d.done)?d.done:[];$("restoreBox").value="";save();$("restoreBtn").textContent="복원됨 ✓";setTimeout(()=>$("restoreBtn").textContent="복원",1500)}catch(e){$("restoreBtn").textContent="형식이 달라요";setTimeout(()=>$("restoreBtn").textContent="복원",1500)}};
+/* 링크 공유: 사이트 주소 + #s=일정데이터 → 열면 불러오기 안내가 떠요 */
+const SITE_URL="";
+const b64e=o=>{const u=new TextEncoder().encode(JSON.stringify(o));let b="";u.forEach(c=>b+=String.fromCharCode(c));return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
+const b64d=t=>{t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";const b=atob(t),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return JSON.parse(new TextDecoder().decode(u))};
+const siteBase=()=>(store.get("sh_site")||SITE_URL||"").trim().split("#")[0];
+$("siteUrl").value=store.get("sh_site")||SITE_URL||"";
+$("siteSave").onclick=()=>{const v=$("siteUrl").value.trim();if(v&&!/^https?:\/\//i.test(v)){$("siteSave").textContent="https://로 시작해야 해요";setTimeout(()=>$("siteSave").textContent="저장",1800);return}store.set("sh_site",v);$("siteSave").textContent="저장됨 ✓";setTimeout(()=>$("siteSave").textContent="저장",1500)};
+$("linkBtn").onclick=async()=>{const base=siteBase();if(!base){$("linkBtn").textContent="위에 사이트 주소를 먼저 넣어 주세요";setTimeout(()=>$("linkBtn").textContent="🔗 링크 공유 (카톡)",2200);return}
+ const url=base+"#s="+b64e({v:1,schedules,favorites,done});
+ if(navigator.share){try{await navigator.share({title:"상하이 여행 가이드",text:"상하이 여행 일정 · 누르면 일정이 담긴 사이트가 열려요",url});return}catch(e){if(e&&e.name==="AbortError")return}}
+ copyText(url,$("linkBtn"),"🔗 링크 공유 (카톡)")};
+function showImport(){let m=location.hash.match(/^#s=(.+)$/);if(!m)return;let d;try{d=b64d(m[1])}catch(e){return}
+ if(!d||!Array.isArray(d.schedules))return;
+ $("importBar").innerHTML=`<div class="card" style="border:2px solid #236b78"><b>📩 공유된 일정이 있어요</b><div class="muted" style="margin:6px 0">일정 ${d.schedules.length}개 · 즐겨찾기 ${(d.favorites||[]).length}개. 불러올까요?</div><div class="actions"><button class="small" id="impMerge" type="button">내 일정에 합치기</button><button class="small secondary" id="impReplace" type="button">공유된 걸로 바꾸기</button><button class="small outline" id="impSkip" type="button">무시</button></div></div>`;
+ const clean=()=>{$("importBar").innerHTML="";try{history.replaceState(null,"",location.pathname+location.search)}catch(e){location.hash=""}};
+ $("impMerge").onclick=()=>{const key=x=>[x.day,x.time||"",x.title||x.name||"",x.cn||""].join("|");const have=new Set(schedules.map(key));d.schedules.forEach(x=>{if(!have.has(key(x)))schedules.push(x)});(d.favorites||[]).forEach(f=>{if(!favorites.includes(f))favorites.push(f)});save();clean()};
+ $("impReplace").onclick=()=>{schedules=d.schedules;favorites=Array.isArray(d.favorites)?d.favorites:favorites;done=Array.isArray(d.done)?d.done:done;save();clean()};
+ $("impSkip").onclick=clean}
+window.addEventListener("hashchange",showImport);
+
+/* 파일 저장/불러오기 */
+const planFile=()=>{const t=JSON.stringify({v:1,app:"shanghai",schedules,favorites,done});const dt=new Date(),n=`상하이일정_${dt.getMonth()+1}-${dt.getDate()}_${String(dt.getHours()).padStart(2,"0")}${String(dt.getMinutes()).padStart(2,"0")}.json`;return{t,n}};
+const dlFile=(t,n)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"application/json"}));a.download=n;document.body.appendChild(a);a.click();a.remove()};
+$("fileSave").onclick=async()=>{const{t,n}=planFile(),B=$("fileSave"),L="📤 일정 저장 + 카톡 공유";
+ try{const f=new File([t],n,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"상하이 여행 일정"});return}}catch(e){if(e&&e.name==="AbortError")return}
+ try{dlFile(t,n);B.textContent="저장됨 ✓ 다운로드 폴더 → 카톡에 첨부";setTimeout(()=>B.textContent=L,3500)}catch(e){copyText(t,B,L)}};
+$("fileDl").onclick=()=>{const{t,n}=planFile();try{dlFile(t,n);$("fileDl").textContent="저장됨 ✓";setTimeout(()=>$("fileDl").textContent="💾 파일로만 저장",2000)}catch(e){copyText(t,$("fileDl"),"💾 파일로만 저장")}};
+$("fileLoadBtn").onclick=()=>$("fileLoad").click();
+$("fileLoad").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;let d;try{d=JSON.parse(await f.text());if(!Array.isArray(d.schedules))throw 0}catch(x){$("importBar").innerHTML='<div class="warn">이 파일은 일정 파일이 아니에요.</div>';return}
+ const prev={schedules,favorites,done};schedules=d.schedules;favorites=Array.isArray(d.favorites)?d.favorites:[];done=Array.isArray(d.done)?d.done:[];save();document.querySelector('[data-tab="schedule"]').click();
+ $("importBar").innerHTML=`<div class="card" style="border:2px solid #236b78"><b>✅ 일정 ${schedules.length}개를 적용했어요</b><div class="actions" style="margin-top:8px"><button class="small outline" id="undoImp" type="button">되돌리기</button></div></div>`;
+ $("undoImp").onclick=()=>{({schedules,favorites,done}=prev);save();$("importBar").innerHTML=""}};
+
+const PREP=[["📱 앱·파일",["이 HTML 파일을 폰에 저장하고 Chrome으로 열어 보기 (비행기 모드로도 열리는지)","크롬 홈 화면에 추가하거나 북마크해서 바로 열 수 있게 하기","‘일정 저장’ → ‘파일 불러오기’가 되는지 한 번 테스트","일정을 바꿀 때마다 ‘일정 저장’으로 파일 백업 (브라우저 데이터를 지우면 사라져요)"]],
+["🗺 길찾기·예약",["Amap Global(고덕지도) 설치 + 오프라인 지도 받아 두기","디디추싱(滴滴) 설치","위챗 설치 (대중점평 미니프로그램·예약용)","대중점평(大众点评) 설치 또는 위챗에서 열리는지 확인"]],
+["💳 결제·연결",["알리페이·위챗페이에 해외 카드 연동","VPN·유심·로밍 확인 (카톡·구글 이용 시 필요)","공항에서 쓸 와이파이/데이터 준비"]],
+["📋 정보",["숙소 이름·주소(중국어) 캡처해 두기 — 택시 기사님께 보여주기용","여권 유효기간·입국 서류 확인","푸동공항 도착/출발 시간 확인하고 AI 계획에 입력"]]];
+let prepDone=load("sh_prep");
+function renderPrep(){let n=0,t=0;$("prepList").innerHTML=PREP.map(([h,l])=>`<h3 class="sech" style="margin-top:12px">${h}</h3>`+l.map(x=>{t++;const k=x,on=prepDone.includes(k);if(on)n++;return `<label style="display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:14px;line-height:1.5;${on?"opacity:.55;text-decoration:line-through":""}"><input type="checkbox" ${on?"checked":""} style="width:20px;height:20px;margin-top:2px;flex:none" onchange="prepTgl(${JSON.stringify(k).replace(/"/g,"&quot;")},this.checked)"><span>${esc(x)}</span></label>`}).join("")).join("");$("prepSum").textContent=`✈️ 출발 전 체크리스트 · 오프라인 안내 (${n}/${t})`}
+function prepTgl(k,on){prepDone=prepDone.filter(x=>x!==k);if(on)prepDone.push(k);store.set("sh_prep",JSON.stringify(prepDone));renderPrep()}
+
+let storageOK=true;try{localStorage.setItem("_t","1");localStorage.removeItem("_t")}catch(e){storageOK=false}
+if(!storageOK)$("storeWarn").classList.remove("hidden");
+renderPrep();render();showImport();
+</script>
+</body></html>
