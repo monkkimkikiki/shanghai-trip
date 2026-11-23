@@ -363,7 +363,7 @@ $("closeModal").onclick=closeModal;$("modal").onclick=e=>{if(e.target===$("modal
 /* ---------- 근처 가까운 순 ---------- */
 function showNearby(id,type="전체"){
  const s=schedules.find(x=>x.id===id);if(!s)return;nearId=id;nearType=type;
- const all=nearby(s,999),types=["관광","맛집","카페","쇼핑","덕질"];
+ const all=nearby(s,999),types=["관광","맛집","카페","쇼핑","덕질","숙소","교통"];
  const card=({p,t})=>`<article class="card"><div class="place">${esc(p.name)}${tags(p)}${favTag(p)}</div><div class="muted">${esc(p.type)} · ${esc(p.area)} · ${esc(p.desc)}</div>${tipl(p)}<span class="badge">${t.same?"같은 지역 · ":""}${t.main} · ${t.d.toFixed(1)}km</span>${t.alt?`<div class="muted" style="margin-top:4px">${t.alt}</div>`:""}<div class="actions"><button class="small" onclick="openAdd(${p.id},'${esc(s.day)}')">＋ 같은 날에 추가</button></div></article>`;
  let h=viewChips()+'<div class="filters">'+["전체",...types].map(c=>`<button class="filter ${c===type?"active":""}" onclick="showNearby('${s.id}','${c}')">${c}</button>`).join("")+"</div>";
  if(type==="전체")h+=types.map(tp=>{const l=orderItems(all.filter(x=>x.p.type===tp),x=>x.p,x=>x.t.d).slice(0,3);return l.length?`<h3 class="sech">${tp}</h3>`+l.map(card).join(""):""}).join("");
