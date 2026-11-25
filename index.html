@@ -225,7 +225,7 @@ function orderItems(arr,pf,df){let l=arr.slice();if(viewMode==="fav-only")l=l.fi
  return l}
 function save(){store.set("sh_schedules",JSON.stringify(schedules));store.set("sh_favorites",JSON.stringify(favorites));store.set("sh_done",JSON.stringify(done));render()}
 const AMAP_PKG="com.autonavi.minimap",enc=encodeURIComponent;
-const QMAP={"예상하이":"夜上海(新天地太平湖店)","알리멘타이":"Alimentari 安福路158号"};
+const QMAP={"예상하이":"夜上海 湖滨路168号无限极荟","알리멘타이":"Alimentari 安福路158号","점도덕":"点都德(环贸汇店)","헌지우이치엔":"很久以前羊肉串(南京路第一百货店)","라이라이샤오롱":"莱莱小笼 天津路506号","그랜드마더":"上海姥姥家常饭馆 福州路","지아지아 탕바오":"佳家汤包(黄河路店)","안푸루·우캉루":"武康路"};
 const AREAQ={"인민광장·난징동루":"人民广场","신천지":"新天地","와이탄":"外滩","예원":"豫园","안푸루":"安福路"};
 const AQ=p=>p.type==="숙소"?"上海市黄浦区中山南一路428号":(QMAP[p.name]||(/^上海/.test(p.cn||"")?p.cn:"上海 "+p.cn+((p.type==="맛집"||p.type==="카페")&&AREAQ[p.area]?" "+AREAQ[p.area]:"")));
 function amapWeb(p){return "https://www.amap.com/search?query="+enc(AQ(p))}
